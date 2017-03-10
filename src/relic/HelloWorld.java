@@ -13,9 +13,9 @@ import com.sun.jna.Memory;
 import com.sun.jna.NativeLibrary;
 
 public class HelloWorld {
-    
-    public interface Relic extends Library 
-    {	   
+
+	public interface Relic extends Library
+	{
 //		void ep2_rand(ep2_st.ByReference a);
 		void bn_init(Structure[] a,int digits);
 		void ep_curve_get_ord(Structure bn_st);
@@ -38,10 +38,10 @@ public class HelloWorld {
 		void ep2_mul_monty(Structure ep2_st,Structure ep2_st2,Structure bn_st);
 		void ep_mul_monty(Structure ep_st,Structure ep_st2,Structure bn_st);
 		int fp12_cmp(Pointer fp_12t, Pointer fp_12t2);
-    }
-	
-	public static void main(String[] args) 
-    {	
+	}
+
+	public static void main(String[] args)
+	{
 
 		int DIGIT = 64;
 //		int BN_PRECI = 1024;
@@ -55,34 +55,34 @@ public class HelloWorld {
 		int FP_DIGIT = DIGIT;
 		int FP_BITS = FP_PRIME;
 		int FP_DIGS = (((FP_BITS)/(FP_DIGIT) + 1));
-		
+
 		System.out.println(FP_DIGS);
-		
+
 		bn_st.ByReference ref_k = new bn_st.ByReference();
 		bn_st.ByReference ref_n = new bn_st.ByReference();
 		bn_st[] k = (bn_st[]) ref_k.toArray(1);
 		bn_st[] n = (bn_st[]) ref_n.toArray(1);
-		
+
 		ep_st.ByReference ref_p = new ep_st.ByReference();
 		ep_st[] p = (ep_st[]) ref_p.toArray(2);
-		
+
 		ep2_st.ByReference ref_q = new ep2_st.ByReference();
 		ep2_st.ByReference ref_r = new ep2_st.ByReference();
 		ep2_st[] q = (ep2_st[]) ref_q.toArray(2);
 		ep2_st[] r = (ep2_st[]) ref_r.toArray(1);
-		
+
 		int fp_12t = 2*3*2*FP_DIGS;
 		Pointer e1 = new Memory(fp_12t * Native.getNativeSize(long.class));
 		Pointer e2 = new Memory(fp_12t * Native.getNativeSize(long.class));
 //		long[] e1 = new long[fp_12t];
 //		long[] e2 = new long[fp_12t];
-			
+
 		Relic INSTANCE = (Relic) Native.loadLibrary("/Users/raoul/Documents/workspace/irma/bin/librelic.dylib",Relic.class);
 		if(INSTANCE.core_init() == 1){
 			INSTANCE.core_clean();
 			System.exit(1);
 		}
-		
+
 		if(INSTANCE.ep_param_set_any_pairf() == 1)
 		{
 			INSTANCE.core_clean();
@@ -91,20 +91,20 @@ public class HelloWorld {
 		INSTANCE.ep_param_print();
 //		INSTANCE.fp_param_print();
 		System.out.println(INSTANCE.ep_param_embed());
-		
+
 //		INSTANCE.bn_init(k,BN_SIZE);
 //		INSTANCE.bn_init(n,BN_SIZE);
 //		INSTANCE.bn_init(l,BN_SIZE);
 		INSTANCE.ep_curve_get_ord(n[0]);
-		
+
 		System.out.println("optimal ate pairing non-degeneracy is correct");
 		INSTANCE.ep_rand(p[0]);
 		INSTANCE.ep2_rand(q[0]);
-		
+
 		INSTANCE.pp_map_oatep_k12(e1,p[0],q[0]);
 		System.out.print("Next result should NOT equal 0 : ");
 		System.out.println(INSTANCE.fp12_cmp_dig(e1,1));
-		
+
 		INSTANCE.ep_set_infty(p[0]);
 		INSTANCE.pp_map_oatep_k12(e1,p[0],q[0]);
 		System.out.print("Next result should equal 0 : ");
@@ -115,7 +115,7 @@ public class HelloWorld {
 		INSTANCE.pp_map_oatep_k12(e1,p[0],q[0]);
 		System.out.print("Next result should equal 0 : ");
 		System.out.println(INSTANCE.fp12_cmp_dig(e1,1));
-		
+
 		System.out.println("optimal ate pairing is bilinear");
 		INSTANCE.ep_rand(p[0]);
 		INSTANCE.ep2_rand(q[0]);
@@ -126,10 +126,10 @@ public class HelloWorld {
 		INSTANCE.pp_map_oatep_k12(e2,p[0],q[0]);
 		System.out.print("Next result should equal 0 : ");
 		System.out.println(INSTANCE.fp12_cmp(e1,e2));
-		
+
 		INSTANCE.core_clean();
 
-    }
+	}
 }
 
 
