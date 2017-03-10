@@ -18,6 +18,10 @@ import com.sun.jna.Structure;
  	typedef ep2_st ep2_t[1];
  */
 
+/**
+ * Represents an elliptic curve point over a quadratic extension over a prime
+ * field.
+ */
 public class ep2_st extends Structure{
 	public static class ByReference extends ep2_st implements Structure.ByReference {}
 	

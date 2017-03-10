@@ -1,6 +1,7 @@
 package relic;
+
 import com.sun.jna.Structure;
-import com.sun.jna.ptr.LongByReference;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +22,13 @@ typedef struct {
 typedef bn_st bn_t[1];
 */
 
+/**
+ * Represents a multiple precision integer.
+ *
+ * The field dp points to a vector of digits. These digits are organized
+ * in little-endian format, that is, the least significant digits are
+ * stored in the first positions of the vector.
+ */
 public class bn_st extends Structure {
 	public static class ByReference extends bn_st implements Structure.ByReference {}
 	/** The number of digits allocated to this multiple precision integer. */
@@ -31,9 +39,11 @@ public class bn_st extends Structure {
 	public int sign;
 	/** The sequence of contiguous digits that forms this integer.*/
 	public long[] dp = new long[12];
+
 	public bn_st() {
 		super();
 	}
+
 	protected List<String> getFieldOrder() {
 		return Arrays.asList("alloc", "used", "sign", "dp");
 	}

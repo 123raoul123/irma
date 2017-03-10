@@ -18,6 +18,9 @@ typedef ep_st ep_t[1];
  
  */
 
+/**
+ * Represents an elliptic curve point over a prime field.
+ */
 public class ep_st extends Structure{
 	public static class ByReference extends ep_st implements Structure.ByReference {}
 	
