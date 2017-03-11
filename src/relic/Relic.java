@@ -22,15 +22,15 @@ public interface Relic extends Library {
 	int ep_param_embed();
 	void core_clean();
 	//      void pp_map_oatep_k12(long[] fp_12t, Structure ep_st, Structure ep2_st);
-	void pp_map_oatep_k12(Pointer fp_12t, Structure ep_st, Structure ep2_st);
+	void pp_map_oatep_k12(fp12_t fp_12t, Structure ep_st, Structure ep2_st);
 	//      int fp12_cmp_dig(long[] fp_12t,int x);
-	int fp12_cmp_dig(Pointer fp_12t,int x);
+	int fp12_cmp_dig(fp12_t fp_12t,int x);
 	void ep_set_infty(Structure ep_st);
 	void ep2_set_infty(Structure ep2_st);
 	void bn_rand_mod(Structure bn_st,Structure bn_st2);
 	void ep2_mul_monty(Structure ep2_st,Structure ep2_st2,Structure bn_st);
 	void ep_mul_monty(Structure ep_st,Structure ep_st2,Structure bn_st);
-	int fp12_cmp(Pointer fp_12t, Pointer fp_12t2);
+	int fp12_cmp(fp12_t fp_12t, fp12_t fp_12t2);
 
 	RelicSizes get_relic_sizes();
 }
