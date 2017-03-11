@@ -6,12 +6,11 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 
 public interface Relic extends Library {
-	public static final Relic INSTANCE
-			= (Relic) Native.loadLibrary("/Users/raoul/Documents/workspace/irma/bin/librelic.dylib",Relic.class);
+	public static final Relic INSTANCE = (Relic) Native.loadLibrary("relic",Relic.class);
 	public static final RelicSizes sizes = INSTANCE.get_relic_sizes();
 
-	//		void ep2_rand(ep2_st.ByReference a);
-	void bn_init(bn_t a, int digits);
+	//      void ep2_rand(ep2_st.ByReference a);
+	void bn_init(Structure[] a,int digits);
 	void ep_curve_get_ord(Structure bn_st);
 	void ep_rand(Structure a);
 	void ep2_rand(Structure a);
@@ -22,9 +21,9 @@ public interface Relic extends Library {
 	int ep_param_set_any_pairf();
 	int ep_param_embed();
 	void core_clean();
-	//		void pp_map_oatep_k12(long[] fp_12t, Structure ep_st, Structure ep2_st);
+	//      void pp_map_oatep_k12(long[] fp_12t, Structure ep_st, Structure ep2_st);
 	void pp_map_oatep_k12(Pointer fp_12t, Structure ep_st, Structure ep2_st);
-	//		int fp12_cmp_dig(long[] fp_12t,int x);
+	//      int fp12_cmp_dig(long[] fp_12t,int x);
 	int fp12_cmp_dig(Pointer fp_12t,int x);
 	void ep_set_infty(Structure ep_st);
 	void ep2_set_infty(Structure ep2_st);
@@ -34,5 +33,4 @@ public interface Relic extends Library {
 	int fp12_cmp(Pointer fp_12t, Pointer fp_12t2);
 
 	RelicSizes get_relic_sizes();
-	void ep_curve_get_ord(bn_t ord);
 }

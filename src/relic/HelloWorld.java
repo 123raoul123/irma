@@ -1,7 +1,20 @@
 package relic;
 
+import java.net.URL;
+
 public class HelloWorld {
 	public static void main(String[] args) {
+		// The .getResource() method only returns the correct path when
+		// it is asked to locate an existing file - asking for "", "." or "/"
+		// does not work.
+		URL url = HelloWorld.class.getClassLoader().getResource("librelic.dylib");
+		if (url == null)
+			throw new RuntimeException("Native relic library not found");
+
+		String resources = url.getPath();
+		resources = resources.substring(0, resources.lastIndexOf('/'));
+		System.setProperty("jna.library.path", resources);
+
 		bn_st.ByReference ref_k = new bn_st.ByReference();
 		bn_st.ByReference ref_n = new bn_st.ByReference();
 		bn_st[] k = (bn_st[]) ref_k.toArray(1);
