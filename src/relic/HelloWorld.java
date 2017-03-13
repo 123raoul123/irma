@@ -44,13 +44,6 @@ public class HelloWorld {
     {	
 
 		int DIGIT = 64;
-//		int BN_PRECI = 1024;
-//		int BN_DIGIT = DIGIT;
-//		int RELIC_BN_BITS = BN_PRECI;
-//		int BN_DIGS	= 	(RELIC_BN_BITS/BN_DIGIT);
-//		int BN_SIZE = (2*BN_DIGS+2);
-//		System.out.println(BN_SIZE);
-//		dig_t = uint64_t
 		int FP_PRIME = 638;
 		int FP_DIGIT = DIGIT;
 		int FP_BITS = FP_PRIME;
@@ -74,8 +67,7 @@ public class HelloWorld {
 		int fp_12t = 2*3*2*FP_DIGS;
 		Pointer e1 = new Memory(fp_12t * Native.getNativeSize(long.class));
 		Pointer e2 = new Memory(fp_12t * Native.getNativeSize(long.class));
-//		long[] e1 = new long[fp_12t];
-//		long[] e2 = new long[fp_12t];
+
 			
 		Relic INSTANCE = (Relic) Native.loadLibrary("/Users/raoul/Documents/workspace/irma/bin/librelic.dylib",Relic.class);
 		if(INSTANCE.core_init() == 1){
@@ -89,12 +81,10 @@ public class HelloWorld {
 			System.exit(0);
 		}
 		INSTANCE.ep_param_print();
-//		INSTANCE.fp_param_print();
+
 		System.out.println(INSTANCE.ep_param_embed());
 		
-//		INSTANCE.bn_init(k,BN_SIZE);
-//		INSTANCE.bn_init(n,BN_SIZE);
-//		INSTANCE.bn_init(l,BN_SIZE);
+
 		INSTANCE.ep_curve_get_ord(n[0]);
 		
 		System.out.println("optimal ate pairing non-degeneracy is correct");
