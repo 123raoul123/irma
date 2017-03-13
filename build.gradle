@@ -1,6 +1,7 @@
 apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = "relic.HelloWorld"
 
 sourceSets {
     main.java.srcDir 'src'
