@@ -7,7 +7,7 @@ import com.sun.jna.Structure;
 
 public interface Relic extends Library {
 	public static final Relic INSTANCE = (Relic) Native.loadLibrary("relic",Relic.class);
-	public static final RelicSizes sizes = INSTANCE.get_relic_sizes();
+	public static final RelicSizes SIZES = INSTANCE.get_relic_sizes();
 
 	void bn_init(bn_t a,int digits);
 	void ep_curve_get_ord(bn_t bn_st);
