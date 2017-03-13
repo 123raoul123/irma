@@ -59,6 +59,7 @@ public class HelloWorld {
 		if (url == null)
 			throw new RuntimeException("Native relic library not found");
 
+		// Strip the file from the path
 		String resources = url.getPath();
 		resources = resources.substring(0, resources.lastIndexOf('/'));
 		System.setProperty("jna.library.path", resources);
