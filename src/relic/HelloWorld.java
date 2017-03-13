@@ -4,29 +4,13 @@ import java.net.URL;
 
 public class HelloWorld {
 	public static void main(String[] args) {
-		// The .getResource() method only returns the correct path when
-		// it is asked to locate an existing file - asking for "", "." or "/"
-		// does not work.
-		URL url = HelloWorld.class.getClassLoader().getResource("librelic.dylib");
-		if (url == null)
-			throw new RuntimeException("Native relic library not found");
-
-		String resources = url.getPath();
-		resources = resources.substring(0, resources.lastIndexOf('/'));
-		System.setProperty("jna.library.path", resources);
-
-		if(Relic.INSTANCE.core_init() == 1 || Relic.INSTANCE.ep_param_set_any_pairf() == 1) {
-			Relic.INSTANCE.core_clean();
-			System.exit(1);
-		}
+		initRelic();
 
 		Relic.INSTANCE.ep_param_print();
 		System.out.println(Relic.INSTANCE.ep_param_embed());
 
 		bn_t n = new bn_t();
-		Relic.INSTANCE.bn_init(n, Relic.sizes.bn_size);
 		Relic.INSTANCE.ep_curve_get_ord(n);
-
 
 		fp12_t e1 = new fp12_t();
 		fp12_t e2 = new fp12_t();
@@ -63,7 +47,26 @@ public class HelloWorld {
 		System.out.print("Next result should equal 0 : ");
 		System.out.println(Relic.INSTANCE.fp12_cmp(e1,e2));
 
+		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();
+	}
+
+	private static void initRelic() {
+		// The .getResource() method only returns the correct path when
+		// it is asked to locate an existing file - asking for "", "." or "/"
+		// does not work.
+		URL url = HelloWorld.class.getClassLoader().getResource("librelic.dylib");
+		if (url == null)
+			throw new RuntimeException("Native relic library not found");
+
+		String resources = url.getPath();
+		resources = resources.substring(0, resources.lastIndexOf('/'));
+		System.setProperty("jna.library.path", resources);
+
+		if(Relic.INSTANCE.core_init() == 1 || Relic.INSTANCE.ep_param_set_any_pairf() == 1) {
+			Relic.INSTANCE.core_clean();
+			System.exit(1);
+		}
 	}
 }
 
