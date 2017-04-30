@@ -17,6 +17,7 @@ public interface Relic extends Library {
 	int  fp12_cmp(fp12_t lhs, fp12_t rhs);
 
 	void bn_init(bn_t a,int digits);
+	void bn_copy(bn_t retval,bn_t element);
 	void bn_rand_mod(bn_t num, bn_t mod);
 
 	void ep_curve_get_ord(bn_t bn_st);
@@ -28,9 +29,13 @@ public interface Relic extends Library {
 	void ep_set_infty(ep_t ep_st);
 	void ep_mul_monty(ep_t retval, ep_t element, bn_t num);
 
+	void ep2_copy(ep2_t retval, ep2_t element);
 	void ep2_mul_monty(ep2_t retval, ep2_t element, bn_t num);
+	void ep2_mul_lwnaf(ep2_t retval, ep2_t element, bn_t num);
+	void ep2_add_basic(ep2_t retval, ep2_t first, ep2_t second);
 	void ep2_set_infty(ep2_t ep2_st);
 	void ep2_rand(ep2_t a);
+
 
 	void pp_map_oatep_k12(fp12_t retval, ep_t g1, ep2_t g2);
 
