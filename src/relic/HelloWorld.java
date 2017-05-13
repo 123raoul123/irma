@@ -1,11 +1,19 @@
 package relic;
 
+import Issue.FirstIssuerMessage;
+import Issue.FirstUserMessage;
+import irma.Issuer;
+import irma.PrivateKey;
+import irma.User;
+import irma.UserPrivateKey;
+
 import java.net.URL;
 
 public class HelloWorld {
 	public static void main(String[] args) {
 		initRelic();
 
+		/*
 		Relic.INSTANCE.ep_param_print();
 		System.out.println(Relic.INSTANCE.ep_param_embed());
 
@@ -47,9 +55,24 @@ public class HelloWorld {
 		Relic.INSTANCE.pp_map_oatep_k12(e2,p,q);
 		System.out.print("Next result should equal 0 : ");
 		System.out.println(Relic.INSTANCE.fp12_cmp(e1,e2));
+		*/
+
+		ep2_t Q = new ep2_t();
+		Relic.INSTANCE.ep2_rand(Q);
+		int n = 5;
+
+		PrivateKey pk = new PrivateKey(n,Q);
+		Issuer issue = new Issuer(pk);
+		UserPrivateKey privk = new UserPrivateKey();
+		User use = new User(privk);
+
+		FirstIssuerMessage m = issue.send_FirstIssuerMessage();
+		FirstUserMessage mes = use.sendFirsUserMessage(m);
+		issue.send_SecondIssuerMessage(mes);
 
 		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();
+
 	}
 
 	private static void initRelic() {

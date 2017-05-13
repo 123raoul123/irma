@@ -3,58 +3,78 @@ package Issue;
 import irma.UserPrivateKey;
 import relic.*;
 
+import javax.swing.plaf.SliderUI;
+
 /**
  * Created by raoul on 30/04/2017.
  */
 public class FirstUserMessage {
 
-    private bn_t alpha,kappa_p;
-    private ep2_t S,S_zero,R;
+    private ep_t S,S_zero,R,W;
+    private bn_t s,s_0;
 
 
-    public FirstUserMessage(UserPrivateKey privkey, FirstIssuerMessage message)
+    public FirstUserMessage(ep_t S,ep_t S_zero, ep_t R,ep_t W,bn_t s, bn_t s_0)
     {
-        this.alpha = new bn_t();
-        this.kappa_p = new bn_t();
-        this.S = new ep2_t();
-        this.S_zero = new ep2_t();
-        this.R = new ep2_t();
+        this.S = new ep_t();
+        this.S_zero = new ep_t();
+        this.R = new ep_t();
+        this.s = new bn_t();
+        this.s_0 = new bn_t();
 
-        bn_t ord = new bn_t();
-        Relic.INSTANCE.ep_curve_get_ord(ord);
-        Relic.INSTANCE.bn_rand_mod(this.alpha,ord);
-        Relic.INSTANCE.bn_rand_mod(this.kappa_p,ord);
+        this.S = S;
+        this.S_zero = S_zero;
+        this.R = R;
+        this.W = W;
+        this.s = s;
+        this.s_0 = s_0;
 
-        Relic.INSTANCE.ep2_mul_lwnaf(this.S,message.getS_bar(),this.alpha);
-        Relic.INSTANCE.ep2_mul_lwnaf(this.S_zero,message.getS_zero_bar(),this.alpha);
-
-        ep2_t R_left = new ep2_t();
-        Relic.INSTANCE.ep2_mul_lwnaf(R_left,this.S,this.kappa_p);
-
-        ep2_t R_right = new ep2_t();
-        Relic.INSTANCE.ep2_mul_lwnaf(R_right,this.S_zero,privkey.getk_zero());
-
-        Relic.INSTANCE.ep2_add_basic(this.R,R_left,R_right);
     }
 
-    public ep2_t getS()
+    public FirstUserMessage()
     {
-        ep2_t copy = new ep2_t();
-        Relic.INSTANCE.ep2_copy(copy,this.S);
+
+    }
+
+    public bn_t get_small_s_zero()
+    {
+        bn_t copy = new bn_t();
+        Relic.INSTANCE.bn_copy(copy,this.s_0);
         return copy;
     }
 
-    public ep2_t getS_zero()
+    public bn_t get_Small_s()
     {
-        ep2_t copy = new ep2_t();
-        Relic.INSTANCE.ep2_copy(copy,this.S_zero);
+        bn_t copy = new bn_t();
+        Relic.INSTANCE.bn_copy(copy,this.s);
         return copy;
     }
 
-    public ep2_t getR()
+    public ep_t getW()
     {
-        ep2_t copy = new ep2_t();
-        Relic.INSTANCE.ep2_copy(copy,this.R);
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.W);
+        return copy;
+    }
+
+    public ep_t getS()
+    {
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.S);
+        return copy;
+    }
+
+    public ep_t getS_zero()
+    {
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.S_zero);
+        return copy;
+    }
+
+    public ep_t getR()
+    {
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.R);
         return copy;
     }
 

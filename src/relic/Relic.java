@@ -19,15 +19,22 @@ public interface Relic extends Library {
 	void bn_init(bn_t a,int digits);
 	void bn_copy(bn_t retval,bn_t element);
 	void bn_rand_mod(bn_t num, bn_t mod);
+	void bn_read_bin(bn_t retval,byte[] hash, int len);
+	void bn_add(bn_t retval,bn_t a,bn_t b);
+	void bn_mul_karat(bn_t retval, bn_t a,bn_t b);
 
 	void ep_curve_get_ord(bn_t bn_st);
 	int  ep_param_set(int param);
+	void ep_copy(ep_t retval, ep_t element);
 	void ep_rand(ep_t a);
 	void ep_param_print();
 	int  ep_param_set_any_pairf();
 	int  ep_param_embed();
 	void ep_set_infty(ep_t ep_st);
+	void ep_add_basic(ep_t retval,ep_t first,ep_t second);
 	void ep_mul_monty(ep_t retval, ep_t element, bn_t num);
+	void ep_write_bin(byte[] retval, int len, ep_t a, int pack);
+	int ep_cmp(ep_t p,ep_t q);
 
 	void ep2_copy(ep2_t retval, ep2_t element);
 	void ep2_mul_monty(ep2_t retval, ep2_t element, bn_t num);

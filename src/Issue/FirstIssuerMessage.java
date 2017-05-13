@@ -7,30 +7,39 @@ import irma.*;
  */
 public class FirstIssuerMessage {
 
-    private ep2_t K_bar, S_bar, S_zero_bar;
+    private ep_t S_bar, S_zero_bar;
+    private byte[] nonce;
 
-    public FirstIssuerMessage(PrivateKey privkey)
+    public FirstIssuerMessage(ep_t S_bar,ep_t S_zero_bar, byte[] nonce)
     {
-        this.K_bar = new ep2_t();
-        this.S_bar = new ep2_t();
-        this.S_zero_bar = new ep2_t();
-
-        Relic.INSTANCE.ep2_rand(this.K_bar);
-        Relic.INSTANCE.ep2_mul_lwnaf(this.S_bar,this.K_bar,privkey.geta());
-        Relic.INSTANCE.ep2_mul_lwnaf(this.S_zero_bar,this.K_bar,privkey.geta_list().get(0));
+        this.S_bar = new ep_t();
+        this.S_zero_bar = new ep_t();
+        //TODO ALSO INCLUDE NONCE SHOULD BE INPUT VALUE TO HASHFUNCTION\
+        //Secure PRNG func to fill nonce
+        //CHECK EP2_T AND EP_T
+        this.S_bar = S_bar;
+        this.S_zero_bar = S_zero_bar;
+        this.nonce = nonce;
     }
 
-    public ep2_t getS_bar()
+    public byte[] getNonce()
     {
-        ep2_t copy = new ep2_t();
-        Relic.INSTANCE.ep2_copy(copy,this.S_bar);
+        byte[] copy = new byte[nonce.length];
+        System.arraycopy(nonce,0,copy,0,copy.length);
         return copy;
     }
 
-    public ep2_t getS_zero_bar()
+    public ep_t getS_bar()
     {
-        ep2_t copy = new ep2_t();
-        Relic.INSTANCE.ep2_copy(copy,this.S_zero_bar);
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.S_bar);
+        return copy;
+    }
+
+    public ep_t getS_zero_bar()
+    {
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,this.S_zero_bar);
         return copy;
     }
 }

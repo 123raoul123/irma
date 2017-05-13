@@ -9,23 +9,25 @@ import java.util.List;
 public class PublicKey {
 
     private ep2_t A,Z,Q;
-    private List<ep2_t> A_list = new ArrayList<ep2_t>();
+    private List<ep2_t> A_list;
 
 
-    public PublicKey(bn_t z, bn_t a, List<bn_t> a_list, ep2_t Q)
+    public PublicKey(ep2_t A,ep2_t Z,ep2_t Q, List<ep2_t> A_list)
     {
         this.A = new ep2_t();
         this.Z = new ep2_t();
         this.Q = new ep2_t();
+        this.A_list = new ArrayList<>();
 
+        Relic.INSTANCE.ep2_copy(this.A,A);
+        Relic.INSTANCE.ep2_copy(this.Z,Z);
         Relic.INSTANCE.ep2_copy(this.Q,Q);
-        Relic.INSTANCE.ep2_mul_lwnaf(this.A,Q,a);
-        Relic.INSTANCE.ep2_mul_lwnaf(this.Z,Q,z);
 
-        for(bn_t a_i: a_list){
+        for(ep2_t a_i: A_list)
+        {
             ep2_t temp = new ep2_t();
-            Relic.INSTANCE.ep2_mul_lwnaf(temp,Q,a_i);
-            A_list.add(temp);
+            Relic.INSTANCE.ep2_copy(temp,a_i);
+            this.A_list.add(temp);
         }
 
     }
@@ -61,7 +63,7 @@ public class PublicKey {
 
     public List<ep2_t> getA_list()
     {
-        List<ep2_t> copy = new ArrayList<ep2_t>();
+        List<ep2_t> copy = new ArrayList<>();
         for(ep2_t a_i: this.A_list)
         {
             ep2_t temp = new ep2_t();

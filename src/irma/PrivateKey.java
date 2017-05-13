@@ -26,7 +26,21 @@ public class PrivateKey {
             this.a_list.add(temp);
         }
 
-        this.pubkey = new PublicKey(this.z,this.a,this.a_list,Q);
+        //CREATE PUBLIC KEY
+        ep2_t A = new ep2_t();
+        ep2_t Z = new ep2_t();
+
+        Relic.INSTANCE.ep2_mul_lwnaf(A,Q,a);
+        Relic.INSTANCE.ep2_mul_lwnaf(Z,Q,z);
+        List<ep2_t> A_list = new ArrayList<>();
+
+        for(bn_t a_i: a_list){
+            ep2_t temp = new ep2_t();
+            Relic.INSTANCE.ep2_mul_lwnaf(temp,Q,a_i);
+            A_list.add(temp);
+        }
+
+        this.pubkey = new PublicKey(A,Z,Q,A_list);
     }
 
     public PrivateKey(PrivateKey privkey)
