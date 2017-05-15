@@ -3,6 +3,9 @@ apply plugin: 'application'
 
 mainClassName = "relic.HelloWorld"
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 sourceSets {
     main.java.srcDir 'src'
     main.resources.srcDir 'resources'
