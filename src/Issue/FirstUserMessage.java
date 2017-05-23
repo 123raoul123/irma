@@ -16,24 +16,12 @@ public class FirstUserMessage {
 
     public FirstUserMessage(ep_t S,ep_t S_zero, ep_t R,ep_t W,bn_t s, bn_t s_0)
     {
-        this.S = new ep_t();
-        this.S_zero = new ep_t();
-        this.R = new ep_t();
-        this.s = new bn_t();
-        this.s_0 = new bn_t();
-
         this.S = S;
         this.S_zero = S_zero;
         this.R = R;
         this.W = W;
         this.s = s;
         this.s_0 = s_0;
-
-    }
-
-    public FirstUserMessage()
-    {
-
     }
 
     public bn_t get_small_s_zero()

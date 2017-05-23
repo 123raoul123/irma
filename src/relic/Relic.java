@@ -22,6 +22,8 @@ public interface Relic extends Library {
 	void bn_read_bin(bn_t retval,byte[] hash, int len);
 	void bn_add(bn_t retval,bn_t a,bn_t b);
 	void bn_mul_karat(bn_t retval, bn_t a,bn_t b);
+	void bn_write_bin(byte[] retval, int len, bn_t a);
+	void bn_mod_basic(bn_t result, bn_t num, bn_t modulus);
 
 	void ep_curve_get_ord(bn_t bn_st);
 	int  ep_param_set(int param);

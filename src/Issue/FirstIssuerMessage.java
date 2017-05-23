@@ -12,8 +12,6 @@ public class FirstIssuerMessage {
 
     public FirstIssuerMessage(ep_t S_bar,ep_t S_zero_bar, byte[] nonce)
     {
-        this.S_bar = new ep_t();
-        this.S_zero_bar = new ep_t();
         //TODO ALSO INCLUDE NONCE SHOULD BE INPUT VALUE TO HASHFUNCTION\
         //Secure PRNG func to fill nonce
         //CHECK EP2_T AND EP_T
