@@ -24,6 +24,7 @@ public interface Relic extends Library {
 	void bn_mul_karat(bn_t retval, bn_t a,bn_t b);
 	void bn_write_bin(byte[] retval, int len, bn_t a);
 	void bn_mod_basic(bn_t result, bn_t num, bn_t modulus);
+	int bn_cmp(bn_t p,bn_t q);
 
 	void ep_curve_get_ord(bn_t bn_st);
 	int  ep_param_set(int param);
@@ -40,7 +41,7 @@ public interface Relic extends Library {
 
 	void ep2_copy(ep2_t retval, ep2_t element);
 	void ep2_mul_monty(ep2_t retval, ep2_t element, bn_t num);
-	void ep2_mul_lwnaf(ep2_t retval, ep2_t element, bn_t num);
+	//void ep2_mul_lwnaf(ep2_t retval, ep2_t element, bn_t num);
 	void ep2_add_basic(ep2_t retval, ep2_t first, ep2_t second);
 	void ep2_set_infty(ep2_t ep2_st);
 	void ep2_rand(ep2_t a);

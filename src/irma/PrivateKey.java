@@ -30,13 +30,13 @@ public class PrivateKey {
         ep2_t A = new ep2_t();
         ep2_t Z = new ep2_t();
 
-        Relic.INSTANCE.ep2_mul_lwnaf(A,Q,a);
-        Relic.INSTANCE.ep2_mul_lwnaf(Z,Q,z);
+        Relic.INSTANCE.ep2_mul_monty(A,Q,a);
+        Relic.INSTANCE.ep2_mul_monty(Z,Q,z);
         List<ep2_t> A_list = new ArrayList<>();
 
         for(bn_t a_i: a_list){
             ep2_t temp = new ep2_t();
-            Relic.INSTANCE.ep2_mul_lwnaf(temp,Q,a_i);
+            Relic.INSTANCE.ep2_mul_monty(temp,Q,a_i);
             A_list.add(temp);
         }
 

@@ -26,7 +26,7 @@ public class User {
         this.S_zero = new ep_t();
     }
 
-    public FirstUserMessage sendFirsUserMessage(FirstIssuerMessage message){
+    public FirstUserMessage CreateFirsUserMessage(FirstIssuerMessage message){
         bn_t alpha = new bn_t();
         ep_t R = new ep_t();
         bn_t ord = new bn_t();
@@ -34,32 +34,41 @@ public class User {
         ep_t W = new ep_t();
         byte[] hash = new byte[32];
 
+        //generate random k' and alpha
         Relic.INSTANCE.ep_curve_get_ord(ord);
         Relic.INSTANCE.bn_rand_mod(alpha,ord);
         Relic.INSTANCE.bn_rand_mod(kappa_p,ord);
 
+        //S = S_bar^alpha
         Relic.INSTANCE.ep_mul_monty(S,message.getS_bar(),alpha);
+
+        //S_zero = S_zero_bar^alpha
         Relic.INSTANCE.ep_mul_monty(S_zero,message.getS_zero_bar(),alpha);
 
-        ep_t R_left = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(R_left,S,kappa_p);
+        ep_t left = new ep_t();
+        ep_t right = new ep_t();
 
-        ep_t R_right = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(R_right,S_zero,privkey.getk_zero());
-        Relic.INSTANCE.ep_add_basic(R,R_left,R_right);
+        //R = S^k' S_zero^k_0
+        Relic.INSTANCE.ep_mul_monty(left,S,kappa_p);
+        Relic.INSTANCE.ep_mul_monty(right,S_zero,privkey.getk_zero());
+
+        //add left and right to obtain R
+        Relic.INSTANCE.ep_add_basic(R,left,right);
 
         //Create W = S^w S_0^w_0
+
+        //random w and w_0
         bn_t w = new bn_t();
         bn_t w_0 = new bn_t();
         Relic.INSTANCE.bn_rand_mod(w,ord);
         Relic.INSTANCE.bn_rand_mod(w_0,ord);
 
-        ep_t W_left = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(W_left,S,w);
 
-        ep_t W_right = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(W_right,S_zero,w_0);
-        Relic.INSTANCE.ep_add_basic(W,W_left,R_right);
+        Relic.INSTANCE.ep_mul_monty(left,S,w);
+        Relic.INSTANCE.ep_mul_monty(right,S_zero,w_0);
+
+        //add left and right to obtain W
+        Relic.INSTANCE.ep_add_basic(W,left,right);
 
         //Convert R and W to bytes
         byte[] R_byte = new byte[1000];
@@ -84,17 +93,16 @@ public class User {
             Relic.INSTANCE.bn_read_bin(c,hash,hash.length);
 
             //Create s = ck'+w
-            bn_t temp_s = new bn_t();
+            bn_t temp = new bn_t();
             bn_t s = new bn_t();
-            Relic.INSTANCE.bn_mul_karat(temp_s,c,kappa_p);
-            Relic.INSTANCE.bn_add(s,temp_s,w);
+            Relic.INSTANCE.bn_mul_karat(temp,c,kappa_p);
+            Relic.INSTANCE.bn_add(s,temp,w);
             Relic.INSTANCE.bn_mod_basic(s, s, ord);
 
             //Create s_0 = ck0 + w0
-            bn_t temp_s_0 = new bn_t();
             bn_t s_0 = new bn_t();
-            Relic.INSTANCE.bn_mul_karat(temp_s_0,c,privkey.getk_zero());
-            Relic.INSTANCE.bn_add(s_0,temp_s_0,w_0);
+            Relic.INSTANCE.bn_mul_karat(temp,c,privkey.getk_zero());
+            Relic.INSTANCE.bn_add(s_0,temp,w_0);
             Relic.INSTANCE.bn_mod_basic(s_0, s_0, ord);
 
 //            System.out.printf("R = %s\n", R.toString().substring(0));

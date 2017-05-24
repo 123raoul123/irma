@@ -66,9 +66,9 @@ public class HelloWorld {
 		UserPrivateKey privk = new UserPrivateKey();
 		User use = new User(privk);
 
-		FirstIssuerMessage m = issue.send_FirstIssuerMessage();
-		FirstUserMessage mes = use.sendFirsUserMessage(m);
-		issue.send_SecondIssuerMessage(mes);
+		FirstIssuerMessage m = issue.CreateFirstIssuerMessage();
+		FirstUserMessage mes = use.CreateFirsUserMessage(m);
+		issue.CreateSecondIssuerMessage(mes);
 
 		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();

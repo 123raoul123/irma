@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.List;
 
 
 public class Issuer {
@@ -19,10 +20,11 @@ public class Issuer {
     public Issuer(PrivateKey privkey)
     {
         this.privkey = privkey;
+
         this.nonce = new byte[16];
     }
 
-    public void send_SecondIssuerMessage(FirstUserMessage message)
+    public void CreateSecondIssuerMessage(FirstUserMessage message)
     {
         //Convert R and W to bytes
         byte[] R_byte = new byte[1000];
@@ -51,12 +53,19 @@ public class Issuer {
             Relic.INSTANCE.ep_mul_monty(res,message.getR(),c);
             Relic.INSTANCE.ep_add_basic(res,res,message.getW());
 
-            ep_t temp_1 = new ep_t();
-            ep_t temp_2 = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(temp_1,message.getS(),message.get_Small_s());
-            Relic.INSTANCE.ep_mul_monty(temp_2,message.getS_zero(),message.get_small_s_zero());
+            // Obtain (S^s) (S_0^s_0)
+
+            //left = (S^s)
+            ep_t left = new ep_t();
+            Relic.INSTANCE.ep_mul_monty(left,message.getS(),message.get_Small_s());
+
+            //right = (S_0^s_0)
+            ep_t right = new ep_t();
+            Relic.INSTANCE.ep_mul_monty(right,message.getS_zero(),message.get_small_s_zero());
+
+            // res_1 = (S^s) (S_0^s_0)
             ep_t res_1 = new ep_t();
-            Relic.INSTANCE.ep_add_basic(res_1,temp_1,temp_2);
+            Relic.INSTANCE.ep_add_basic(res_1,left,right);
 
 //            System.out.printf("R = %s\n", message.getR().toString().substring(0));
 //            System.out.printf("W = %s\n", message.getW().toString().substring(0));
@@ -67,11 +76,11 @@ public class Issuer {
 
             if(Relic.INSTANCE.ep_cmp(res,res_1) == 0)
             {
-                System.out.print("Yay");
+                System.out.print("Yay\n");
             }
             else
             {
-                throw new RuntimeException("Proof verification failed :(");
+                throw new RuntimeException("Proof verification failed :(\n");
             }
 
         }
@@ -81,17 +90,23 @@ public class Issuer {
         }
     }
 
-    public FirstIssuerMessage send_FirstIssuerMessage()
+    public FirstIssuerMessage CreateFirstIssuerMessage()
     {
         ep_t K_bar = new ep_t();
         ep_t S_bar = new ep_t();
         ep_t S_zero_bar = new ep_t();
 
+        //Send nonce for schnor
         SecureRandom rand = new SecureRandom();
         rand.nextBytes(this.nonce);
 
+        //Choose random K_bar from G_1
         Relic.INSTANCE.ep_rand(K_bar);
+
+        //S_bar = K_bar^a
         Relic.INSTANCE.ep_mul_monty(S_bar,K_bar,privkey.geta());
+
+        //S_zero_bar = K_bar^a_0
         Relic.INSTANCE.ep_mul_monty(S_zero_bar,K_bar,privkey.geta_list().get(0));
 
         FirstIssuerMessage message = new FirstIssuerMessage(S_bar,S_zero_bar,this.nonce);
