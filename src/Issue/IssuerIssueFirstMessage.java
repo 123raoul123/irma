@@ -4,12 +4,12 @@ import relic.*;
 /**
  * Created by raoul on 30/04/2017.
  */
-public class FirstIssuerMessage {
+public class IssuerIssueFirstMessage {
 
     private ep_t S_bar, S_zero_bar;
     private byte[] nonce;
 
-    public FirstIssuerMessage(ep_t S_bar,ep_t S_zero_bar, byte[] nonce)
+    public IssuerIssueFirstMessage(ep_t S_bar, ep_t S_zero_bar, byte[] nonce)
     {
         //S_bar = K_bar^a
         this.S_bar = S_bar;

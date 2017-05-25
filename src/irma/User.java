@@ -1,12 +1,14 @@
 package irma;
 
 import Issue.*;
+import ShowCredential.UserShowCredentialFirstMessage;
 import relic.*;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 
 /**
@@ -15,24 +17,35 @@ import java.io.ByteArrayOutputStream;
 public class User {
 
     private UserPrivateKey privkey;
-    private bn_t kappa_p;// p is for '
-    private ep_t S, S_zero;
+    private bn_t kappa_p,kappa;// p is for '
+    private ep_t S, S_zero,K,C;
+    private Attributes attributes;
 
-    public User(UserPrivateKey privkey)
+    public User(UserPrivateKey privkey, Attributes at)
     {
         this.privkey = privkey;
-        this.kappa_p = new bn_t();
-        this.S = new ep_t();
-        this.S_zero = new ep_t();
+        kappa_p = new bn_t();
+        kappa = new bn_t();
+        S = new ep_t();
+        S_zero = new ep_t();
+        K = new ep_t();
+        C = new ep_t();
+        attributes = at;
     }
 
-    public FirstUserMessage CreateFirsUserMessage(FirstIssuerMessage message){
+    public UserIssueFirstMessage createUserIssueFirstMessage()
+    {
+        UserIssueFirstMessage mes = new UserIssueFirstMessage(attributes);
+        return mes;
+    }
+
+    public UserIssueSecondMessage createUserIssueSecondMessage(IssuerIssueFirstMessage message){
         bn_t alpha = new bn_t();
         ep_t R = new ep_t();
         bn_t ord = new bn_t();
 
         ep_t W = new ep_t();
-        byte[] hash = new byte[32];
+        byte[] hash;
 
         //generate random k' and alpha
         Relic.INSTANCE.ep_curve_get_ord(ord);
@@ -112,7 +125,7 @@ public class User {
 //            System.out.printf("S0 = %s\n", S_zero.toString().substring(0));
 //            System.out.printf("s0 = %s\n", s_0.toString().substring(0));
 
-            FirstUserMessage m = new FirstUserMessage(S,S_zero,R,W,s,s_0);
+            UserIssueSecondMessage m = new UserIssueSecondMessage(S,S_zero,R,W,s,s_0);
             return m;
 
         }
@@ -121,4 +134,38 @@ public class User {
             throw new RuntimeException(e);
         }
     }
+
+    private computeC()
+    {
+        ep_t temp = new ep_t();
+        //COMPUTE C
+        //C = K
+        Relic.INSTANCE.ep_copy(C,K);
+        //temp = S^k
+        Relic.INSTANCE.ep_mul_monty(temp,S,kappa);
+        //C = K S^k
+        Relic.INSTANCE.ep_add_basic(C,C,temp);
+        //temp = S0^k0
+        Relic.INSTANCE.ep_mul_monty(temp,S_zero,privkey.getk_zero());
+        //C = K S^k S0^k0
+        Relic.INSTANCE.ep_add_basic(C,C,temp);
+
+        List<ep_t> signed_attribute_list = attributes.getSignedAttributeList();
+        List<bn_t> unsigned_attribute_list = attributes.getAttributeList();
+
+        for(int i=0;i<signed_attribute_list.size();++i){
+            //temp = Si^ki
+            Relic.INSTANCE.ep_mul_monty(temp,signed_attribute_list.get(i),unsigned_attribute_list.get(i));
+            //C = K S^k S0^k0 S1^k1 ... Sn^kn
+            Relic.INSTANCE.ep_add_basic(C,C,temp);
+        }
+
+    }
+
+
+    public UserShowCredentialFirstMessage createUserShowCredentialFirstMessage()
+    {
+
+    }
+
 }

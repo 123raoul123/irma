@@ -1,11 +1,9 @@
 package relic;
 
-import Issue.FirstIssuerMessage;
-import Issue.FirstUserMessage;
-import irma.Issuer;
-import irma.PrivateKey;
-import irma.User;
-import irma.UserPrivateKey;
+import Issue.IssuerIssueFirstMessage;
+import Issue.UserIssueFirstMessage;
+import Issue.UserIssueSecondMessage;
+import irma.*;
 
 import java.net.URL;
 
@@ -63,12 +61,14 @@ public class HelloWorld {
 
 		PrivateKey pk = new PrivateKey(n,Q);
 		Issuer issue = new Issuer(pk);
+		Attributes at = new Attributes(n);
 		UserPrivateKey privk = new UserPrivateKey();
-		User use = new User(privk);
+		User use = new User(privk,at);
 
-		FirstIssuerMessage m = issue.CreateFirstIssuerMessage();
-		FirstUserMessage mes = use.CreateFirsUserMessage(m);
-		issue.CreateSecondIssuerMessage(mes);
+		UserIssueFirstMessage fum_mes = use.createUserIssueFirstMessage();
+		IssuerIssueFirstMessage fim_mes = issue.createFirstIssuerMessage();
+		UserIssueSecondMessage sum_mes = use.createUserIssueSecondMessage(fim_mes);
+		issue.createSecondIssuerMessage(fum_mes,sum_mes);
 
 		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();
