@@ -8,13 +8,13 @@ import javax.swing.plaf.SliderUI;
 /**
  * Created by raoul on 30/04/2017.
  */
-public class FirstUserMessage {
+public class SecondUserMessage {
 
     private ep_t S,S_zero,R,W;
     private bn_t s,s_0;
 
 
-    public FirstUserMessage(ep_t S,ep_t S_zero, ep_t R,ep_t W,bn_t s, bn_t s_0)
+    public SecondUserMessage(ep_t S, ep_t S_zero, ep_t R, ep_t W, bn_t s, bn_t s_0)
     {
         this.S = S;
         this.S_zero = S_zero;
