@@ -55,6 +55,18 @@ public class HelloWorld {
 		System.out.println(Relic.INSTANCE.fp12_cmp(e1,e2));
 		*/
 
+		// Calculate a^{-1} mod ord
+		bn_t a = new bn_t(), a_inverse = new bn_t(), ord = new bn_t(), tmp = new bn_t();
+		Relic.INSTANCE.ep_curve_get_ord(ord); // Get the group order
+		Relic.INSTANCE.bn_rand_mod(a, ord);   // Generate a random a
+		Relic.INSTANCE.bn_gcd_ext_basic(tmp, a_inverse, null, a, ord);
+
+		// Check that a * a^{-1} = 1 mod ord
+		bn_t one = new bn_t();
+		Relic.INSTANCE.bn_mul_karat(one, a, a_inverse); // a * a^{-1}
+		Relic.INSTANCE.bn_mod_basic(one, one, ord);     // reduce mod ord
+		System.out.printf("Modular inverse works: %s\n", Relic.INSTANCE.bn_cmp_dig(one, 1) == 0);
+
 		ep2_t Q = new ep2_t();
 		Relic.INSTANCE.ep2_rand(Q);
 		int n = 5;
