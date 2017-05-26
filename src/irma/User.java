@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -135,7 +136,7 @@ public class User {
         }
     }
 
-    private computeC()
+    private void computeC()
     {
         ep_t temp = new ep_t();
         //COMPUTE C
@@ -163,8 +164,41 @@ public class User {
     }
 
 
-    public UserShowCredentialFirstMessage createUserShowCredentialFirstMessage()
+    public void createUserShowCredentialFirstMessage()//UserShowCredentialFirstMessage createUserShowCredentialFirstMessage()
     {
+        //Generate rand alpha and beta
+        bn_t alpha = new bn_t();
+        bn_t beta = new bn_t();
+        bn_t ord = new bn_t();
+        Relic.INSTANCE.ep_curve_get_ord(ord);
+        Relic.INSTANCE.bn_rand_mod(alpha,ord);
+        Relic.INSTANCE.bn_rand_mod(beta,ord);
+
+        //Multiply everything with alpha
+        ep_t K_bar = new ep_t();
+        ep_t S_bar = new ep_t();
+        ep_t S_zero_bar = new ep_t();
+        Relic.INSTANCE.ep_mul_monty(K_bar,K,alpha);
+        Relic.INSTANCE.ep_mul_monty(S_bar,S,alpha);
+        Relic.INSTANCE.ep_mul_monty(S_zero_bar,S_zero,alpha);
+
+        List<ep_t> signed_attribute_list = attributes.getSignedAttributeList();
+        List<ep_t> masked_attribute_list = new ArrayList<ep_t>();
+
+        ep_t ep_temp = new ep_t();
+
+        for(ep_t a_i: signed_attribute_list){
+            Relic.INSTANCE.ep_mul_monty(ep_temp,a_i,alpha);
+            masked_attribute_list.add(ep_temp);
+        }
+
+        bn_t bn_temp = new bn_t();
+        ep_t C_tilde = new ep_t();
+        //C_tilde = C^(-alpha/beta)
+        Relic.INSTANCE.bn_neg(bn_temp,alpha);
+        Relic.INSTANCE.bn_div(bn_temp,bn_temp,beta);
+        Relic.INSTANCE.ep_mul_monty(C_tilde,C,bn_temp);
+
 
     }
 

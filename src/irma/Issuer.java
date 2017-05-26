@@ -17,25 +17,24 @@ public class Issuer {
 
     private PrivateKey privkey;
     private byte[] nonce;
-    private ep_t K_bar;
+    private ep_t S_bar,S_zero_bar;
 
     public Issuer(PrivateKey privkey)
     {
         this.privkey = privkey;
         nonce = new byte[16];
-        K_bar = new ep_t;
+        S_bar = new ep_t();
+        S_zero_bar = new ep_t();
     }
 
     public IssuerIssueFirstMessage createFirstIssuerMessage()
     {
-        ep_t S_bar = new ep_t();
-        ep_t S_zero_bar = new ep_t();
-
-        //Send nonce for schnor
+        //Generate nonce for schnor
         SecureRandom rand = new SecureRandom();
         rand.nextBytes(this.nonce);
 
         //Choose random K_bar from G_1
+        ep_t K_bar = new ep_t();
         Relic.INSTANCE.ep_rand(K_bar);
 
         //S_bar = K_bar^a
@@ -108,18 +107,60 @@ public class Issuer {
                 throw new RuntimeException("Proof verification failed :(\n");
             }
 
+            //Verify that S != S_bar
+            if(Relic.INSTANCE.ep_cmp(S_bar,second.getS()) != 0)
+            {
+                System.out.print("Yay\n");
+            }
+            else
+            {
+                throw new RuntimeException("Proof verification failed :(\n");
+            }
+
+            //Set K = S^(1/a)
+            ep_t K = new ep_t();
+            bn_t bn_one = new bn_t();
+            bn_t bn_temp = new bn_t();
+            //APPLYING VERY UGLY METHOD TO GET BN_T WITH VALUE 1
+            Relic.INSTANCE.bn_set_2b(bn_one,0);
+//            System.out.printf("bn_temp = %s\n", bn_temp.toString().substring(0));
+            Relic.INSTANCE.bn_div(bn_temp,bn_one,privkey.geta());
+            Relic.INSTANCE.ep_mul_monty(K,second.getS(),bn_temp);
+
+            //set res = S_zero^(1/a0)
+            Relic.INSTANCE.bn_div(bn_temp,bn_one,privkey.geta_list().get(0));
+            Relic.INSTANCE.ep_mul_monty(res,second.getS_zero(),bn_temp);
+
+            //Verify that K = S_zero^(1/a0)
+            if(Relic.INSTANCE.ep_cmp(K,res) == 0)
+            {
+                System.out.print("Yay\n");
+            }
+            else
+            {
+                throw new RuntimeException("Proof verification failed :(\n");
+            }
+
+            //generate random k''
             bn_t ord = new bn_t();
             //kappa_pp = k''
             bn_t kappa_pp = new bn_t();
-
-            //generate random k' and alpha
             Relic.INSTANCE.ep_curve_get_ord(ord);
             Relic.INSTANCE.bn_rand_mod(kappa_pp,ord);
 
+            //Set Si = K^(ai) where i [1..n]
             List<ep_t> signed_attribute_list = new ArrayList<ep_t>();
 
+            for(int i=0; i<first.getAttributes().getAttributeList().size();++i)
+            {
+                //we skip a0 that is why we have i+1
+                Relic.INSTANCE.ep_mul_monty(left,K,privkey.geta_list().get(i+1));
+                signed_attribute_list.add(left);
+            }
 
-
+            //Calculate T
+            ep_t T = new ep_t();
+            
 
 
         }
