@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * Created by raoul on 29/04/2017.
  */
-public class PublicKey {
+public class IssuerPublicKey {
 
     private ep2_t A,Z,Q;
     private List<ep2_t> A_list;
 
 
-    public PublicKey(ep2_t A,ep2_t Z,ep2_t Q, List<ep2_t> A_list)
+    public IssuerPublicKey(ep2_t A, ep2_t Z, ep2_t Q, List<ep2_t> A_list)
     {
         this.A = new ep2_t();
         this.Z = new ep2_t();
@@ -32,7 +32,7 @@ public class PublicKey {
 
     }
 
-    public PublicKey(PublicKey pubkey)
+    public IssuerPublicKey(IssuerPublicKey pubkey)
     {
       this.A = pubkey.getA();
       this.Z = pubkey.getZ();
@@ -63,13 +63,7 @@ public class PublicKey {
 
     public List<ep2_t> getA_list()
     {
-        List<ep2_t> copy = new ArrayList<>();
-        for(ep2_t a_i: this.A_list)
-        {
-            ep2_t temp = new ep2_t();
-            Relic.INSTANCE.ep2_copy(temp,a_i);
-            copy.add(temp);
-        }
+        List<ep2_t> copy = new ArrayList<>(A_list);
         return copy;
     }
 

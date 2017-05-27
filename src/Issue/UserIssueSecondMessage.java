@@ -24,14 +24,14 @@ public class UserIssueSecondMessage {
         this.s_0 = s_0;
     }
 
-    public bn_t get_small_s_zero()
+    public bn_t gets_0()
     {
         bn_t copy = new bn_t();
         Relic.INSTANCE.bn_copy(copy,this.s_0);
         return copy;
     }
 
-    public bn_t get_Small_s()
+    public bn_t gets()
     {
         bn_t copy = new bn_t();
         Relic.INSTANCE.bn_copy(copy,this.s);

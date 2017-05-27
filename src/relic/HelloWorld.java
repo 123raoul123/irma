@@ -71,9 +71,9 @@ public class HelloWorld {
 		Relic.INSTANCE.ep2_rand(Q);
 		int n = 5;
 
-		PrivateKey pk = new PrivateKey(n,Q);
+		IssuerPrivateKey pk = new IssuerPrivateKey(n,Q);
 		Issuer issue = new Issuer(pk);
-		Attributes at = new Attributes(n);
+		Attributes at = new Attributes(n-1);
 		UserPrivateKey privk = new UserPrivateKey();
 		User use = new User(privk,at);
 

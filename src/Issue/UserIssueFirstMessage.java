@@ -1,20 +1,23 @@
 package Issue;
-import irma.Attributes;
+import relic.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by raoul on 24/05/2017.
  */
 public class UserIssueFirstMessage {
 
-    private Attributes attributes;
+    private List<bn_t> unsigned_attributes;
 
-    public UserIssueFirstMessage(Attributes attributes)
+    public UserIssueFirstMessage(List<bn_t> unsigned_attributes)
     {
-        this.attributes = attributes;
+        this.unsigned_attributes = unsigned_attributes;
     }
 
-    public Attributes getAttributes()
+    public List<bn_t> getUnsigned_attributes()
     {
-        return attributes;
+        List<bn_t> copy = new ArrayList<>(unsigned_attributes);
+        return copy;
     }
 }

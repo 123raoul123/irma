@@ -3,13 +3,13 @@ import relic.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrivateKey {
+public class IssuerPrivateKey {
     private List<bn_t> a_list = new ArrayList<bn_t>();
     private bn_t a,z;
-    private PublicKey pubkey;
+    private IssuerPublicKey pubkey;
 
 
-    public PrivateKey(int n, ep2_t Q)
+    public IssuerPrivateKey(int n, ep2_t Q)
     {
         this.a = new bn_t();
         this.z = new bn_t();
@@ -40,10 +40,10 @@ public class PrivateKey {
             A_list.add(temp);
         }
 
-        this.pubkey = new PublicKey(A,Z,Q,A_list);
+        this.pubkey = new IssuerPublicKey(A,Z,Q,A_list);
     }
 
-    public PrivateKey(PrivateKey privkey)
+    public IssuerPrivateKey(IssuerPrivateKey privkey)
     {
         this.a = privkey.geta();
         this.z = privkey.getz();
@@ -51,9 +51,9 @@ public class PrivateKey {
         this.pubkey = privkey.getPublicKey();
     }
 
-    public PublicKey getPublicKey()
+    public IssuerPublicKey getPublicKey()
     {
-        return new PublicKey(this.pubkey);
+        return new IssuerPublicKey(this.pubkey);
     }
 
     public bn_t geta()
@@ -72,13 +72,7 @@ public class PrivateKey {
 
     public List<bn_t> geta_list()
     {
-        List<bn_t> copy = new ArrayList<bn_t>();
-        for(bn_t a_i: this.a_list)
-        {
-            bn_t temp = new bn_t();
-            Relic.INSTANCE.bn_copy(temp,a_i);
-            copy.add(temp);
-        }
+        List<bn_t> copy = new ArrayList<>(a_list);
         return copy;
     }
 

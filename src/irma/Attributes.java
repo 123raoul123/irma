@@ -50,7 +50,7 @@ public class Attributes {
         return copy;
     }
 
-    public List<bn_t> getAttributeList()
+    public List<bn_t> getUnsigned_attribute_list()
     {
         List<bn_t> copy = new ArrayList<bn_t>();
         for(bn_t a_i: unsigned_attribute_list)

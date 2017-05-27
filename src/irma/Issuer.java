@@ -1,5 +1,6 @@
 package irma;
 import Issue.IssuerIssueFirstMessage;
+import Issue.IssuerIssueSecondMessage;
 import Issue.UserIssueFirstMessage;
 import Issue.UserIssueSecondMessage;
 import relic.*;
@@ -15,11 +16,11 @@ import java.util.List;
 
 public class Issuer {
 
-    private PrivateKey privkey;
+    private IssuerPrivateKey privkey;
     private byte[] nonce;
     private ep_t S_bar,S_zero_bar;
 
-    public Issuer(PrivateKey privkey)
+    public Issuer(IssuerPrivateKey privkey)
     {
         this.privkey = privkey;
         nonce = new byte[16];
@@ -48,7 +49,7 @@ public class Issuer {
         return message;
     }
 
-    public void createSecondIssuerMessage(UserIssueFirstMessage first, UserIssueSecondMessage second)
+    public IssuerIssueSecondMessage createSecondIssuerMessage(UserIssueFirstMessage first, UserIssueSecondMessage second)
     {
         //Convert R and W to bytes
         byte[] R_byte = new byte[1000];
@@ -81,11 +82,11 @@ public class Issuer {
 
             //left = (S^s)
             ep_t left = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(left, second.getS(), second.get_Small_s());
+            Relic.INSTANCE.ep_mul_monty(left, second.getS(), second.gets());
 
             //right = (S_0^s_0)
             ep_t right = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(right, second.getS_zero(), second.get_small_s_zero());
+            Relic.INSTANCE.ep_mul_monty(right, second.getS_zero(), second.gets_0());
 
             // res_1 = (S^s) (S_0^s_0)
             ep_t res_1 = new ep_t();
@@ -94,9 +95,9 @@ public class Issuer {
 //            System.out.printf("R = %s\n", second.getR().toString().substring(0));
 //            System.out.printf("W = %s\n", second.getW().toString().substring(0));
 //            System.out.printf("S = %s\n", second.getS().toString().substring(0));
-//            System.out.printf("s = %s\n", second.get_Small_s().toString().substring(0));
+//            System.out.printf("s = %s\n", second.gets().toString().substring(0));
 //            System.out.printf("S0 = %s\n", second.getS_zero().toString().substring(0));
-//            System.out.printf("s0 = %s\n", second.get_small_s_zero().toString().substring(0));
+//            System.out.printf("s0 = %s\n", second.gets_0().toString().substring(0));
 
             if(Relic.INSTANCE.ep_cmp(res,res_1) == 0)
             {
@@ -110,7 +111,7 @@ public class Issuer {
             //Verify that S != S_bar
             if(Relic.INSTANCE.ep_cmp(S_bar,second.getS()) != 0)
             {
-                System.out.print("Yay\n");
+                System.out.print("Yay S != S_bar\n");
             }
             else
             {
@@ -118,55 +119,66 @@ public class Issuer {
             }
 
             //Set K = S^(1/a)
+            // Calculate a^{-1} mod ord
+            bn_t  inverse = new bn_t(), ord = new bn_t(), tmp = new bn_t();
+            Relic.INSTANCE.ep_curve_get_ord(ord); // Get the group order
+            Relic.INSTANCE.bn_gcd_ext_basic(tmp, inverse, null, privkey.geta(), ord);
             ep_t K = new ep_t();
-            bn_t bn_one = new bn_t();
-            bn_t bn_temp = new bn_t();
-            //APPLYING VERY UGLY METHOD TO GET BN_T WITH VALUE 1
-            Relic.INSTANCE.bn_set_2b(bn_one,0);
-//            System.out.printf("bn_temp = %s\n", bn_temp.toString().substring(0));
-            Relic.INSTANCE.bn_div(bn_temp,bn_one,privkey.geta());
-            Relic.INSTANCE.ep_mul_monty(K,second.getS(),bn_temp);
+            Relic.INSTANCE.ep_mul_monty(K,second.getS(),inverse);
 
-            //set res = S_zero^(1/a0)
-            Relic.INSTANCE.bn_div(bn_temp,bn_one,privkey.geta_list().get(0));
-            Relic.INSTANCE.ep_mul_monty(res,second.getS_zero(),bn_temp);
+            // Set res = S0^(1/a0)
+            // Calculate a0^{-1}
+            Relic.INSTANCE.bn_gcd_ext_basic(tmp, inverse, null, privkey.geta_list().get(0), ord);
+            Relic.INSTANCE.ep_mul_monty(res,second.getS_zero(),inverse);
 
             //Verify that K = S_zero^(1/a0)
             if(Relic.INSTANCE.ep_cmp(K,res) == 0)
             {
-                System.out.print("Yay\n");
+                System.out.print("Yay K = S_zero^(1/a0)\n");
             }
             else
             {
                 throw new RuntimeException("Proof verification failed :(\n");
             }
 
-            //generate random k''
-            bn_t ord = new bn_t();
-            //kappa_pp = k''
+            //generate random k'', kappa_pp = k''
             bn_t kappa_pp = new bn_t();
-            Relic.INSTANCE.ep_curve_get_ord(ord);
             Relic.INSTANCE.bn_rand_mod(kappa_pp,ord);
 
             //Set Si = K^(ai) where i [1..n]
             List<ep_t> signed_attribute_list = new ArrayList<ep_t>();
 
-            for(int i=0; i<first.getAttributes().getAttributeList().size();++i)
+            for(int i=1; i<privkey.geta_list().size();++i)
             {
-                //we skip a0 that is why we have i+1
-                Relic.INSTANCE.ep_mul_monty(left,K,privkey.geta_list().get(i+1));
-                signed_attribute_list.add(left);
+                Relic.INSTANCE.ep_mul_monty(res,K,privkey.geta_list().get(i));
+                signed_attribute_list.add(res);
             }
 
             //Calculate T
             ep_t T = new ep_t();
+            Relic.INSTANCE.ep_mul_monty(res,second.getS(),kappa_pp);
+            Relic.INSTANCE.ep_add_basic(T,K,res);
+            Relic.INSTANCE.ep_add_basic(T,T,second.getR());
 
+            // Get unsigned attributes from first User message
+            List<bn_t> unsigned_attributes = first.getUnsigned_attributes();
 
+            for(int i=1; i<signed_attribute_list.size();++i)
+            {
+                Relic.INSTANCE.ep_mul_monty(res,signed_attribute_list.get(i),unsigned_attributes.get(i-1));
+                Relic.INSTANCE.ep_add_basic(T,T,res);
+            }
+
+            Relic.INSTANCE.ep_mul_monty(T,T,privkey.getz());
+            IssuerIssueSecondMessage mes = new IssuerIssueSecondMessage(kappa_pp,K,signed_attribute_list,T);
+
+            return mes;
 
         }
         catch (IOException | NoSuchAlgorithmException e)
         {
             e.printStackTrace();
+            throw new RuntimeException("Something went wrong :(\n");
         }
     }
 

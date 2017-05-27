@@ -44,6 +44,7 @@ public interface Relic extends Library {
 	void ep_mul_monty(ep_t retval, ep_t element, bn_t num);
 	void ep_write_bin(byte[] retval, int len, ep_t a, int pack);
 	int ep_cmp(ep_t p,ep_t q);
+	void ep_neg_basic(ep_t r, ep_t p);
 
 	void ep2_copy(ep2_t retval, ep2_t element);
 	void ep2_mul_monty(ep2_t retval, ep2_t element, bn_t num);
