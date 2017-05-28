@@ -79,29 +79,15 @@ public class Issuer {
             Relic.INSTANCE.ep_add_basic(res,res, second.getW());
 
             // Obtain (S^s) (S_0^s_0)
+            ep_t ep_temp = new ep_t(),res_1 = new ep_t();
+            Relic.INSTANCE.ep_mul_monty(res_1, second.getS(), second.gets());
+            Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_zero(), second.gets_0());
+            Relic.INSTANCE.ep_add_basic(res_1,res_1,ep_temp);
 
-            //left = (S^s)
-            ep_t left = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(left, second.getS(), second.gets());
-
-            //right = (S_0^s_0)
-            ep_t right = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(right, second.getS_zero(), second.gets_0());
-
-            // res_1 = (S^s) (S_0^s_0)
-            ep_t res_1 = new ep_t();
-            Relic.INSTANCE.ep_add_basic(res_1,left,right);
-
-//            System.out.printf("R = %s\n", second.getR().toString().substring(0));
-//            System.out.printf("W = %s\n", second.getW().toString().substring(0));
-//            System.out.printf("S = %s\n", second.getS().toString().substring(0));
-//            System.out.printf("s = %s\n", second.gets().toString().substring(0));
-//            System.out.printf("S0 = %s\n", second.getS_zero().toString().substring(0));
-//            System.out.printf("s0 = %s\n", second.gets_0().toString().substring(0));
 
             if(Relic.INSTANCE.ep_cmp(res,res_1) == 0)
             {
-                System.out.print("Yay\n");
+                System.out.print("Yay Proof verification succeeded\n");
             }
             else
             {

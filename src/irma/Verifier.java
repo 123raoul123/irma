@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Map;
 
 import relic.*;
 
@@ -46,22 +47,23 @@ public class Verifier {
         ep_t ep_temp = new ep_t(), D = new ep_t();
 
         Relic.INSTANCE.ep_neg_basic(D,second.getK_blind());
+        List<Boolean> disclosed = first.getDisclosed();
+        Map<Integer,bn_t> disclosed_attribute_list = first.getDisclosed_attribute_list();
+        List<ep_t> blinded_attribute_list = second.getBlinded_attribute_list();
 
-        for(int i=0;i<first.getDisclosed().size();++i)
+        for(int i=0;i<disclosed.size();++i)
         {
-            if(first.getDisclosed().get(i))
+            if(disclosed.get(i))
             {
-//                System.out.printf("i = %d\n", i);
                 // S_i^(-k_i)
-                Relic.INSTANCE.bn_neg(tmp,first.getDisclosed_attribute_list().get(i));
-                Relic.INSTANCE.ep_mul_monty(ep_temp,second.getBlinded_attribute_list().get(i),tmp);
+                Relic.INSTANCE.bn_neg(tmp,disclosed_attribute_list.get(i));
+                Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),tmp);
 
                 // Add to D
                 Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
             }
         }
 
-//        System.out.printf("D = %s\n", D.toString().substring(0));
         /*******************************************
 
          SCHNORR PART
@@ -103,12 +105,13 @@ public class Verifier {
             Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
             Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_zero_blind(),second.gets0());
             Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
+            Map<Integer,bn_t> s_list = second.gets_list();
 
-            for(int i=0;i<first.getDisclosed().size();++i)
+            for(int i=0;i<disclosed.size();++i)
             {
-                if(!first.getDisclosed().get(i))
+                if(!disclosed.get(i))
                 {
-                    Relic.INSTANCE.ep_mul_monty(ep_temp,second.getBlinded_attribute_list().get(i),second.gets_list().get(i));
+                    Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),s_list.get(i));
                     Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
                 }
             }
@@ -122,6 +125,31 @@ public class Verifier {
             Relic.INSTANCE.ep_mul_monty(res_1,D,c);
             Relic.INSTANCE.ep_add_basic(res_1,res_1,second.getW());
 
+//            System.out.printf("c = %s\n", c.toString().substring(0));
+//            System.out.printf("D = %s\n", D.toString().substring(0));
+//            System.out.printf("W = %s\n", second.getW().toString().substring(0));
+//            System.out.printf("K_blind = %s\n", second.getK_blind().toString().substring(0));
+//            System.out.printf("S_blind = %s\n", second.getS_blind().toString().substring(0));
+//            System.out.printf("S_zero_blind = %s\n", second.getS_zero_blind().toString().substring(0));
+//            for(int i=0;i<blinded_attribute_list.size();++i)
+//            {
+//                System.out.printf("element = %s\n", blinded_attribute_list.get(i).toString().substring(0));
+//            }
+//            System.out.printf("C_blind = %s\n", second.getC_blind().toString().substring(0));
+//            System.out.printf("T_blind = %s\n", second.getT_blind().toString().substring(0));
+//            System.out.printf("s_beta = %s\n", second.gets_beta().toString().substring(0));
+//            System.out.printf("s = %s\n", second.gets().toString().substring(0));
+//            System.out.printf("S0 = %s\n", S_zero.toString().substring(0));
+//            System.out.printf("s0 = %s\n", second.gets0().toString().substring(0));
+//            for(int i=0;i<disclosed.size();++i)
+//            {
+//                if(!disclosed.get(i)) {
+//                    System.out.printf("element = %s\n", s_list.get(i).toString().substring(0));
+//                }
+//            }
+
+//            System.out.printf("re1 = %s\n", res.toString().substring(0));
+//            System.out.printf("re2 = %s\n", res_1.toString().substring(0));
             if(Relic.INSTANCE.ep_cmp(res,res_1) == 0)
             {
                 System.out.print("Yay Proof succeeded\n");

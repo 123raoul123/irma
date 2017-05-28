@@ -40,7 +40,7 @@ public class Attributes {
 
     public List<ep_t> getSignedAttributeList()
     {
-        List<ep_t> copy = new ArrayList<ep_t>();
+        List<ep_t> copy = new ArrayList<>();
         for(ep_t a_i: signed_attribute_list)
         {
             ep_t temp = new ep_t();

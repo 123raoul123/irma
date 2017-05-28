@@ -118,6 +118,8 @@ public class User {
             Relic.INSTANCE.bn_add(s_0,temp,w_0);
             Relic.INSTANCE.bn_mod_basic(s_0, s_0, ord);
 
+
+//            System.out.printf("c = %s\n", c.toString().substring(0));
 //            System.out.printf("R = %s\n", R.toString().substring(0));
 //            System.out.printf("W = %s\n", W.toString().substring(0));
 //            System.out.printf("S = %s\n", S.toString().substring(0));
@@ -226,6 +228,7 @@ public class User {
         Relic.INSTANCE.bn_neg(tmp,alpha);
         Relic.INSTANCE.bn_mul_karat(tmp,tmp,inverse);
 
+
         Relic.INSTANCE.ep_mul_monty(C_blind,C,tmp);
         Relic.INSTANCE.ep_mul_monty(T_blind,T,tmp);
 
@@ -311,7 +314,6 @@ public class User {
             hash = digest.digest(concat);
             bn_t c = new bn_t();
             Relic.INSTANCE.bn_read_bin(c,hash,hash.length);
-//            System.out.printf("c = %s\n", c.toString().substring(0));
 
             //Create s_beta = cbeta+w
             bn_t s_beta = new bn_t();
@@ -341,12 +343,29 @@ public class User {
                     s_list.put(i,temp);
                 }
             }
+
 //            System.out.printf("c = %s\n", c.toString().substring(0));
-//            System.out.printf("R = %s\n", R.toString().substring(0));
-//            System.out.printf("S = %s\n", S.toString().substring(0));
+//            System.out.printf("D = %s\n", D.toString().substring(0));
+//            System.out.printf("K_blind = %s\n", K_blind.toString().substring(0));
+//            System.out.printf("S_blind = %s\n", S_blind.toString().substring(0));
+//            System.out.printf("S_zero_blind = %s\n", S_zero_blind.toString().substring(0));
+//            for(int i=0;i<blinded_attribute_list.size();++i)
+//            {
+//                System.out.printf("element = %s\n", blinded_attribute_list.get(i).toString().substring(0));
+//            }
+//            System.out.printf("C_blind = %s\n", C_blind.toString().substring(0));
+//            System.out.printf("T_blind = %s\n", T_blind.toString().substring(0));
+//            System.out.printf("W = %s\n", W.toString().substring(0));
+//            System.out.printf("s_beta = %s\n", s_beta.toString().substring(0));
 //            System.out.printf("s = %s\n", s.toString().substring(0));
-//            System.out.printf("S0 = %s\n", S_zero.toString().substring(0));
-//            System.out.printf("s0 = %s\n", s_0.toString().substring(0));
+//            System.out.printf("s0 = %s\n", s0.toString().substring(0));
+//            for(int i=0;i<disclosed.size();++i)
+//            {
+//                if(!disclosed.get(i)) {
+//                    System.out.printf("element = %s\n", s_list.get(i).toString().substring(0));
+//                }
+//            }
+
 
             UserShowCredentialSecondMessage m = new UserShowCredentialSecondMessage(K_blind,S_blind,S_zero_blind,
                     blinded_attribute_list,C_blind,T_blind,W,s_beta,s,s0,s_list);

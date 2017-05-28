@@ -30,7 +30,7 @@ public class UserIssueSecondMessage {
         this.s_0 = new bn_t();
 
         Relic.INSTANCE.bn_copy(this.s,s);
-        Relic.INSTANCE.bn_copy(this.s_0,s);
+        Relic.INSTANCE.bn_copy(this.s_0,s_0);
     }
 
     public bn_t gets_0()
