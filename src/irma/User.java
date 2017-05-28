@@ -1,6 +1,7 @@
 package irma;
 
 import Issue.*;
+import ShowCredential.UserShowCredentialFirstMessage;
 import ShowCredential.UserShowCredentialSecondMessage;
 import ShowCredential.VerifierShowCredentialFirstMessage;
 import relic.*;
@@ -176,6 +177,23 @@ public class User {
 
     }
 
+    public UserShowCredentialFirstMessage createUserShowCredentialFirstMessage(List<Boolean> disclosed)
+    {
+        Map<Integer,bn_t> disclosed_attribute_list = new HashMap<>();
+        List<bn_t> attribute_list = attributes.getUnsigned_attribute_list();
+
+        for(int i=0; i<disclosed.size();++i)
+        {
+            if(disclosed.get(i))
+            {
+                disclosed_attribute_list.put(i,attribute_list.get(i));
+            }
+        }
+
+        UserShowCredentialFirstMessage m = new UserShowCredentialFirstMessage(disclosed_attribute_list,disclosed);
+        return m;
+    }
+
 
     public UserShowCredentialSecondMessage createUserShowCredentialSecondMessage(VerifierShowCredentialFirstMessage message, List<Boolean> disclosed)
     {
@@ -195,8 +213,9 @@ public class User {
         List<ep_t> blinded_attribute_list = new ArrayList<>();
 
         for(ep_t a_i: signed_attribute_list){
-            Relic.INSTANCE.ep_mul_monty(ep_temp,a_i,alpha);
-            blinded_attribute_list.add(ep_temp);
+            ep_t bla = new ep_t();
+            Relic.INSTANCE.ep_mul_monty(bla,a_i,alpha);
+            blinded_attribute_list.add(bla);
         }
 
         //C_blind = C^(-alpha/beta), T_blind = T^(-alpha/beta)
@@ -223,6 +242,7 @@ public class User {
         {
             if(disclosed.get(i))
             {
+//                System.out.printf("i = %d\n", i);
                 // S_i^(-k_i)
                 Relic.INSTANCE.bn_neg(tmp,unsigned_attribute_list.get(i));
                 Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),tmp);
@@ -230,6 +250,9 @@ public class User {
                 Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
             }
         }
+
+//        System.out.printf("K_blind = %s\n", K_blind.toString().substring(0));
+//        System.out.printf("D = %s\n", D.toString().substring(0));
 
         /*******************************************
 
@@ -256,11 +279,12 @@ public class User {
         {
             if(!disclosed.get(i))
             {
-                Relic.INSTANCE.bn_rand_mod(tmp,ord);
+                bn_t temp = new bn_t();
+                Relic.INSTANCE.bn_rand_mod(temp,ord);
                 Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),tmp);
                 Relic.INSTANCE.ep_add_basic(W,W,ep_temp);
 
-                w_list.put(i,tmp);
+                w_list.put(i,temp);
             }
         }
 
@@ -287,6 +311,7 @@ public class User {
             hash = digest.digest(concat);
             bn_t c = new bn_t();
             Relic.INSTANCE.bn_read_bin(c,hash,hash.length);
+//            System.out.printf("c = %s\n", c.toString().substring(0));
 
             //Create s_beta = cbeta+w
             bn_t s_beta = new bn_t();
@@ -316,9 +341,8 @@ public class User {
                     s_list.put(i,temp);
                 }
             }
-
+//            System.out.printf("c = %s\n", c.toString().substring(0));
 //            System.out.printf("R = %s\n", R.toString().substring(0));
-//            System.out.printf("W = %s\n", W.toString().substring(0));
 //            System.out.printf("S = %s\n", S.toString().substring(0));
 //            System.out.printf("s = %s\n", s.toString().substring(0));
 //            System.out.printf("S0 = %s\n", S_zero.toString().substring(0));

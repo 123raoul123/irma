@@ -30,7 +30,7 @@ public class Issuer {
 
     public IssuerIssueFirstMessage createFirstIssuerMessage()
     {
-        //Generate nonce for schnor
+        //Generate nonce for schnorr
         SecureRandom rand = new SecureRandom();
         rand.nextBytes(this.nonce);
 
@@ -146,12 +146,13 @@ public class Issuer {
             Relic.INSTANCE.bn_rand_mod(kappa_pp,ord);
 
             //Set Si = K^(ai) where i [1..n]
-            List<ep_t> signed_attribute_list = new ArrayList<ep_t>();
+            List<ep_t> signed_attribute_list = new ArrayList<>();
 
             for(int i=1; i<privkey.geta_list().size();++i)
             {
-                Relic.INSTANCE.ep_mul_monty(res,K,privkey.geta_list().get(i));
-                signed_attribute_list.add(res);
+                ep_t bla = new ep_t();
+                Relic.INSTANCE.ep_mul_monty(bla,K,privkey.geta_list().get(i));
+                signed_attribute_list.add(bla);
             }
 
             //Calculate T

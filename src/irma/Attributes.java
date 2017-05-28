@@ -13,8 +13,8 @@ public class Attributes {
 
     public Attributes(int n)
     {
-        unsigned_attribute_list = new ArrayList<bn_t>();
-        signed_attribute_list = new ArrayList<ep_t>();
+        unsigned_attribute_list = new ArrayList<>();
+        signed_attribute_list = new ArrayList<>();
 
         bn_t ord = new bn_t();
         Relic.INSTANCE.ep_curve_get_ord(ord);

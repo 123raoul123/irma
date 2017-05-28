@@ -1,11 +1,17 @@
 package relic;
 
 import Issue.IssuerIssueFirstMessage;
+import Issue.IssuerIssueSecondMessage;
 import Issue.UserIssueFirstMessage;
 import Issue.UserIssueSecondMessage;
+import ShowCredential.UserShowCredentialFirstMessage;
+import ShowCredential.UserShowCredentialSecondMessage;
+import ShowCredential.VerifierShowCredentialFirstMessage;
 import irma.*;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelloWorld {
 	public static void main(String[] args) {
@@ -53,7 +59,7 @@ public class HelloWorld {
 		Relic.INSTANCE.pp_map_oatep_k12(e2,p,q);
 		System.out.print("Next result should equal 0 : ");
 		System.out.println(Relic.INSTANCE.fp12_cmp(e1,e2));
-		*/
+
 
 		// Calculate a^{-1} mod ord
 		bn_t a = new bn_t(), a_inverse = new bn_t(), ord = new bn_t(), tmp = new bn_t();
@@ -66,21 +72,39 @@ public class HelloWorld {
 		Relic.INSTANCE.bn_mul_karat(one, a, a_inverse); // a * a^{-1}
 		Relic.INSTANCE.bn_mod_basic(one, one, ord);     // reduce mod ord
 		System.out.printf("Modular inverse works: %s\n", Relic.INSTANCE.bn_cmp_dig(one, 1) == 0);
+		*/
 
 		ep2_t Q = new ep2_t();
 		Relic.INSTANCE.ep2_rand(Q);
 		int n = 5;
 
 		IssuerPrivateKey pk = new IssuerPrivateKey(n,Q);
-		Issuer issue = new Issuer(pk);
+		Issuer issuer = new Issuer(pk);
 		Attributes at = new Attributes(n-1);
 		UserPrivateKey privk = new UserPrivateKey();
-		User use = new User(privk,at);
+		User user = new User(privk,at);
 
-		UserIssueFirstMessage fum_mes = use.createUserIssueFirstMessage();
-		IssuerIssueFirstMessage fim_mes = issue.createFirstIssuerMessage();
-		UserIssueSecondMessage sum_mes = use.createUserIssueSecondMessage(fim_mes);
-		issue.createSecondIssuerMessage(fum_mes,sum_mes);
+		// ISSUE PROTOCOL
+		UserIssueFirstMessage fum_mes = user.createUserIssueFirstMessage();
+		IssuerIssueFirstMessage fim_mes = issuer.createFirstIssuerMessage();
+		UserIssueSecondMessage sum_mes = user.createUserIssueSecondMessage(fim_mes);
+		IssuerIssueSecondMessage sim_mes = issuer.createSecondIssuerMessage(fum_mes,sum_mes);
+		user.setAttributes(sim_mes);
+
+		//ShowCredential protocol
+		Verifier verifier = new Verifier(pk.getPublicKey());
+
+		Boolean t = true,f = false;
+		List<Boolean> bools = new ArrayList<>();
+		bools.add(t);
+		bools.add(f);
+		bools.add(f);
+		bools.add(t);
+
+		UserShowCredentialFirstMessage fium_mes = user.createUserShowCredentialFirstMessage(bools);
+		VerifierShowCredentialFirstMessage fvm_mes = verifier.createVerifierShowCredentialFirstMessage();
+		UserShowCredentialSecondMessage seum_mes = user.createUserShowCredentialSecondMessage(fvm_mes,bools);
+		verifier.verifyCredentials(fium_mes,seum_mes);
 
 		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();

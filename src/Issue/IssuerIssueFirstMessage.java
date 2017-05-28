@@ -11,9 +11,14 @@ public class IssuerIssueFirstMessage {
 
     public IssuerIssueFirstMessage(ep_t S_bar, ep_t S_zero_bar, byte[] nonce)
     {
-        this.S_bar = S_bar;
-        this.S_zero_bar = S_zero_bar;
-        this.nonce = nonce;
+        this.S_bar = new ep_t();
+        this.S_zero_bar = new ep_t();
+
+        Relic.INSTANCE.ep_copy(this.S_bar,S_bar);
+        Relic.INSTANCE.ep_copy(this.S_zero_bar,S_zero_bar);
+
+        this.nonce = new byte[nonce.length];
+        System.arraycopy(nonce,0,this.nonce,0,this.nonce.length);
     }
 
     public byte[] getNonce()

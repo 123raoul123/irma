@@ -21,9 +21,9 @@ public class IssuerPrivateKey {
 
         for(int i =0;i<n;++i)
         {
-            bn_t temp = new bn_t();
-            Relic.INSTANCE.bn_rand_mod(temp,ord);
-            this.a_list.add(temp);
+            bn_t tmp = new bn_t();
+            Relic.INSTANCE.bn_rand_mod(tmp,ord);
+            this.a_list.add(tmp);
         }
 
         //CREATE PUBLIC KEY
