@@ -43,8 +43,23 @@ public class UserShowCredentialSecondMessage {
         Relic.INSTANCE.bn_copy(this.s,s);
         Relic.INSTANCE.bn_copy(this.s0,s0);
 
-        this.blinded_attribute_list = new ArrayList<>(blinded_attribute_list);
-        this.s_list = new HashMap<>(s_list);
+        this.blinded_attribute_list = new ArrayList<>();
+
+        for(int i=0;i<blinded_attribute_list.size();++i)
+        {
+            ep_t temp = new ep_t();
+            Relic.INSTANCE.ep_copy(temp,blinded_attribute_list.get(i));
+            this.blinded_attribute_list.add(temp);
+        }
+
+        this.s_list = new HashMap<>();
+
+        for(Map.Entry<Integer,bn_t> entry: s_list.entrySet())
+        {
+            bn_t temp = new bn_t();
+            Relic.INSTANCE.bn_copy(temp,entry.getValue());
+            this.s_list.put(entry.getKey(),temp);
+        }
 
     }
 
@@ -113,12 +128,28 @@ public class UserShowCredentialSecondMessage {
 
     public List<ep_t> getBlinded_attribute_list()
     {
-        return blinded_attribute_list;
+        List<ep_t> copy = new ArrayList<>();
+
+        for(int i=0;i<blinded_attribute_list.size();++i)
+        {
+            ep_t temp = new ep_t();
+            Relic.INSTANCE.ep_copy(temp,blinded_attribute_list.get(i));
+            copy.add(temp);
+        }
+        return copy;
     }
 
     public Map<Integer, bn_t> gets_list()
     {
-        return s_list;
+        Map<Integer,bn_t> copy = new HashMap<>();
+
+        for(Map.Entry<Integer,bn_t> entry: s_list.entrySet())
+        {
+            bn_t temp = new bn_t();
+            Relic.INSTANCE.bn_copy(temp,entry.getValue());
+            copy.put(entry.getKey(),temp);
+        }
+        return copy;
     }
 
 }

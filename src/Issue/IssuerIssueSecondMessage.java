@@ -21,27 +21,50 @@ public class IssuerIssueSecondMessage {
         Relic.INSTANCE.bn_copy(this.kappa_pp,kappa_pp);
         Relic.INSTANCE.ep_copy(this.K,K);
         Relic.INSTANCE.ep_copy(this.T,T);
-        this.signed_attribute_list = new ArrayList<>(signed_attribute_list);
+
+        this.signed_attribute_list = new ArrayList<>();
+
+        for(int i=0;i<signed_attribute_list.size();++i)
+        {
+            ep_t temp = new ep_t();
+            Relic.INSTANCE.ep_copy(temp,signed_attribute_list.get(i));
+            this.signed_attribute_list.add(temp);
+        }
     }
 
     public bn_t getKappa_pp()
     {
-        return kappa_pp;
+        bn_t copy = new bn_t();
+        Relic.INSTANCE.bn_copy(copy,kappa_pp);
+        return copy;
     }
 
     public ep_t getT()
     {
-        return T;
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,T);
+        return copy;
     }
 
     public ep_t getK()
     {
-        return K;
+        ep_t copy = new ep_t();
+        Relic.INSTANCE.ep_copy(copy,K);
+        return copy;
     }
 
     public List<ep_t> getSigned_attribute_list()
     {
-        return signed_attribute_list;
+        List<ep_t> copy = new ArrayList<>();
+
+        for(int i=0;i<signed_attribute_list.size();++i)
+        {
+            ep_t temp = new ep_t();
+            Relic.INSTANCE.ep_copy(temp,signed_attribute_list.get(i));
+            copy.add(temp);
+        }
+
+        return copy;
     }
 
 }
