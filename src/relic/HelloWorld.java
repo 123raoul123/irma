@@ -94,16 +94,15 @@ public class HelloWorld {
 		//ShowCredential protocol
 		Verifier verifier = new Verifier(pk.getPublicKey());
 
-		Boolean t = true,f = false;
 		List<Boolean> bools = new ArrayList<>();
-		bools.add(t);
-		bools.add(f);
-		bools.add(f);
-		bools.add(t);
+		bools.add(true);
+		bools.add(false);
+		bools.add(false);
+		bools.add(true);
 
 		UserShowCredentialFirstMessage fium_mes = user.createUserShowCredentialFirstMessage(bools);
 		VerifierShowCredentialFirstMessage fvm_mes = verifier.createVerifierShowCredentialFirstMessage();
-		UserShowCredentialSecondMessage seum_mes = user.createUserShowCredentialSecondMessage(fvm_mes,bools);
+		UserShowCredentialSecondMessage seum_mes = user.createUserShowCredentialSecondMessage(fium_mes, fvm_mes,bools);
 		verifier.verifyCredentials(fium_mes,seum_mes);
 
 		System.out.println("Cleaning up Relic");

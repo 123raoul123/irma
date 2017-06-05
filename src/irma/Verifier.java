@@ -38,31 +38,8 @@ public class Verifier {
 
     public void verifyCredentials(UserShowCredentialFirstMessage first,UserShowCredentialSecondMessage second)
     {
-        /*******************************************
 
-         COMPUTE D
-
-         *******************************************/
-        bn_t tmp = new bn_t();
-        ep_t ep_temp = new ep_t(), D = new ep_t();
-
-        Relic.INSTANCE.ep_neg_basic(D,second.getK_blind());
-        List<Boolean> disclosed = first.getDisclosed();
-        Map<Integer,bn_t> disclosed_attribute_list = first.getDisclosed_attribute_list();
-        List<ep_t> blinded_attribute_list = second.getBlinded_attribute_list();
-
-        for(int i=0;i<disclosed.size();++i)
-        {
-            if(disclosed.get(i))
-            {
-                // S_i^(-k_i)
-                Relic.INSTANCE.bn_neg(tmp,disclosed_attribute_list.get(i));
-                Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),tmp);
-
-                // Add to D
-                Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
-            }
-        }
+        ep_t D = Attributes.compute_D(second.getK_blind(), second.getBasepoints(), first.getDisclosedAttributes());
 
         /*******************************************
 
@@ -100,21 +77,9 @@ public class Verifier {
              */
 
             ep_t res = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(res,second.getC_blind(),second.gets_beta());
-            Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_blind(),second.gets());
-            Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-            Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_zero_blind(),second.gets0());
-            Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-            Map<Integer,bn_t> s_list = second.gets_list();
-
-            for(int i=0;i<disclosed.size();++i)
-            {
-                if(!disclosed.get(i))
-                {
-                    Relic.INSTANCE.ep_mul_monty(ep_temp,blinded_attribute_list.get(i),s_list.get(i));
-                    Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-                }
-            }
+            res = Attributes.computeDLRepresentation(
+                    second.getC_blind(), second.getS_blind(), second.getS_zero_blind(), second.getBasepoints(),
+                    second.gets_beta(), second.gets(), second.gets0(), second.gets_list());
 
             /*
 
@@ -131,9 +96,9 @@ public class Verifier {
 //            System.out.printf("K_blind = %s\n", second.getK_blind().toString().substring(0));
 //            System.out.printf("S_blind = %s\n", second.getS_blind().toString().substring(0));
 //            System.out.printf("S_zero_blind = %s\n", second.getS_zero_blind().toString().substring(0));
-//            for(int i=0;i<blinded_attribute_list.size();++i)
+//            for(int i=0;i<basepoints.size();++i)
 //            {
-//                System.out.printf("element = %s\n", blinded_attribute_list.get(i).toString().substring(0));
+//                System.out.printf("element = %s\n", basepoints.get(i).toString().substring(0));
 //            }
 //            System.out.printf("C_blind = %s\n", second.getC_blind().toString().substring(0));
 //            System.out.printf("T_blind = %s\n", second.getT_blind().toString().substring(0));

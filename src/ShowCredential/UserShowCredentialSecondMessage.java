@@ -14,11 +14,11 @@ public class UserShowCredentialSecondMessage {
 
     private ep_t K_blind,S_blind,S_zero_blind,C_blind,T_blind,W;
     private bn_t s_beta,s,s0;
-    private List<ep_t> blinded_attribute_list;
+    private List<ep_t> basepoints;
     private Map<Integer,bn_t> s_list;
 
     public UserShowCredentialSecondMessage(ep_t K_blind, ep_t S_blind, ep_t S_zero_blind,
-                                           List<ep_t> blinded_attribute_list, ep_t C_blind, ep_t T_blind,
+                                           List<ep_t> basepoints, ep_t C_blind, ep_t T_blind,
                                            ep_t W, bn_t s_beta, bn_t s, bn_t s0, Map<Integer,bn_t> s_list)
     {
         this.K_blind = new ep_t();
@@ -43,13 +43,13 @@ public class UserShowCredentialSecondMessage {
         Relic.INSTANCE.bn_copy(this.s,s);
         Relic.INSTANCE.bn_copy(this.s0,s0);
 
-        this.blinded_attribute_list = new ArrayList<>();
+        this.basepoints = new ArrayList<>();
 
-        for(int i=0;i<blinded_attribute_list.size();++i)
+        for(int i = 0; i< basepoints.size(); ++i)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,blinded_attribute_list.get(i));
-            this.blinded_attribute_list.add(temp);
+            Relic.INSTANCE.ep_copy(temp, basepoints.get(i));
+            this.basepoints.add(temp);
         }
 
         this.s_list = new HashMap<>();
@@ -126,14 +126,14 @@ public class UserShowCredentialSecondMessage {
         return copy;
     }
 
-    public List<ep_t> getBlinded_attribute_list()
+    public List<ep_t> getBasepoints()
     {
         List<ep_t> copy = new ArrayList<>();
 
-        for(int i=0;i<blinded_attribute_list.size();++i)
+        for(int i = 0; i< basepoints.size(); ++i)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,blinded_attribute_list.get(i));
+            Relic.INSTANCE.ep_copy(temp, basepoints.get(i));
             copy.add(temp);
         }
         return copy;
