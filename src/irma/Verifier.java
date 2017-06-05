@@ -100,21 +100,9 @@ public class Verifier {
              */
 
             ep_t res = new ep_t();
-            Relic.INSTANCE.ep_mul_monty(res,second.getC_blind(),second.gets_beta());
-            Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_blind(),second.gets());
-            Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-            Relic.INSTANCE.ep_mul_monty(ep_temp,second.getS_zero_blind(),second.gets0());
-            Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-            Map<Integer,bn_t> s_list = second.gets_list();
-
-            for(int i=0;i<disclosed.size();++i)
-            {
-                if(!disclosed.get(i))
-                {
-                    Relic.INSTANCE.ep_mul_monty(ep_temp,basepoints.get(i),s_list.get(i));
-                    Relic.INSTANCE.ep_add_basic(res,res,ep_temp);
-                }
-            }
+            res = Attributes.computeDLRepresentation(
+                    second.getC_blind(), second.getS_blind(), second.getS_zero_blind(), second.getBasepoints(),
+                    second.gets_beta(), second.gets(), second.gets0(), second.gets_list());
 
             /*
 

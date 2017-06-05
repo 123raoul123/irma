@@ -1,15 +1,20 @@
 package irma;
 
-import Issue.*;
+import Issue.IssuerIssueFirstMessage;
+import Issue.IssuerIssueSecondMessage;
+import Issue.UserIssueFirstMessage;
+import Issue.UserIssueSecondMessage;
 import ShowCredential.UserShowCredentialFirstMessage;
 import ShowCredential.UserShowCredentialSecondMessage;
 import ShowCredential.VerifierShowCredentialFirstMessage;
-import relic.*;
+import relic.Relic;
+import relic.bn_t;
+import relic.ep_t;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -271,25 +276,17 @@ public class User {
         Relic.INSTANCE.bn_rand_mod(w,ord);
         Relic.INSTANCE.bn_rand_mod(w0,ord);
 
-        ep_t W = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(W,C_blind,w_beta);
-        Relic.INSTANCE.ep_mul_monty(ep_temp,S_blind,w);
-        Relic.INSTANCE.ep_add_basic(W,W,ep_temp);
-        Relic.INSTANCE.ep_mul_monty(ep_temp,S_zero_blind,w0);
-        Relic.INSTANCE.ep_add_basic(W,W,ep_temp);
-
-        for(int i=0;i<disclosed.size();++i)
-        {
-            if(!disclosed.get(i))
-            {
+        for(int i=0; i<disclosed.size(); ++i) {
+            if (!disclosed.get(i)) {
                 bn_t temp = new bn_t();
-                Relic.INSTANCE.bn_rand_mod(temp,ord);
-                Relic.INSTANCE.ep_mul_monty(ep_temp,blindedBasepoints.get(i),tmp);
-                Relic.INSTANCE.ep_add_basic(W,W,ep_temp);
-
-                w_list.put(i,temp);
+                Relic.INSTANCE.bn_rand_mod(temp, ord);
+                w_list.put(i, temp);
             }
         }
+
+        ep_t W = Attributes.computeDLRepresentation(
+                C_blind, S_blind, S_zero_blind, blindedBasepoints, w_beta, w, w0, w_list);
+
 
         //COMPUTE C AND ALL SMALL s
 

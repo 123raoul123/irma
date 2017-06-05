@@ -2,6 +2,7 @@ package irma;
 import relic.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by raoul on 24/05/2017.
@@ -60,5 +61,23 @@ public class Attributes {
             copy.add(temp);
         }
         return copy;
+    }
+
+    public static ep_t computeDLRepresentation(ep_t C, ep_t S, ep_t S0, List<ep_t> Si,
+                                               bn_t b, bn_t k, bn_t k0, Map<Integer, bn_t> ki) {
+        ep_t ret = new ep_t(), ep_temp = new ep_t();
+
+        Relic.INSTANCE.ep_mul_monty(ret, C, b);
+        Relic.INSTANCE.ep_mul_monty(ep_temp, S, k);
+        Relic.INSTANCE.ep_add_basic(ret, ret, ep_temp);
+        Relic.INSTANCE.ep_mul_monty(ep_temp, S0, k0);
+        Relic.INSTANCE.ep_add_basic(ret, ret, ep_temp);
+
+        for (int i : ki.keySet()) {
+            Relic.INSTANCE.ep_mul_monty(ep_temp, Si.get(i), ki.get(i));
+            Relic.INSTANCE.ep_add_basic(ret, ret, ep_temp);
+        }
+
+        return ret;
     }
 }
