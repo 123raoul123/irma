@@ -202,7 +202,7 @@ public class User {
     }
 
 
-    public UserShowCredentialSecondMessage createUserShowCredentialSecondMessage(VerifierShowCredentialFirstMessage message, List<Boolean> disclosed)
+    public UserShowCredentialSecondMessage createUserShowCredentialSecondMessage(UserShowCredentialFirstMessage first, VerifierShowCredentialFirstMessage message, List<Boolean> disclosed)
     {
         //Generate rand alpha and beta
         bn_t alpha = new bn_t(),beta = new bn_t(),ord = new bn_t();
@@ -237,27 +237,7 @@ public class User {
         Relic.INSTANCE.ep_mul_monty(C_blind,C,tmp);
         Relic.INSTANCE.ep_mul_monty(T_blind,T,tmp);
 
-        /*******************************************
-
-                COMPUTE D
-
-         *******************************************/
-
-        Relic.INSTANCE.ep_neg_basic(D,K_blind);
-        List<bn_t> attributes = this.attributes.getAttributes();
-
-        for(int i=0;i<disclosed.size();++i)
-        {
-            if(disclosed.get(i))
-            {
-//                System.out.printf("i = %d\n", i);
-                // S_i^(-k_i)
-                Relic.INSTANCE.bn_neg(tmp,attributes.get(i));
-                Relic.INSTANCE.ep_mul_monty(ep_temp,blindedBasepoints.get(i),tmp);
-                // Add to D
-                Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
-            }
-        }
+        D = Attributes.compute_D(K_blind, blindedBasepoints, first.getDisclosedAttributes());
 
 //        System.out.printf("K_blind = %s\n", K_blind.toString().substring(0));
 //        System.out.printf("D = %s\n", D.toString().substring(0));
@@ -329,6 +309,7 @@ public class User {
             Relic.INSTANCE.bn_mul_karat(tmp,c,privkey.getk_zero());
             Relic.INSTANCE.bn_add(s0,tmp,w0);
 
+            List<bn_t> attributes = this.attributes.getAttributes();
             Map<Integer,bn_t> s_list = new HashMap<>();
             for(int i=0;i<disclosed.size();++i)
             {

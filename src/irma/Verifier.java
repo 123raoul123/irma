@@ -38,31 +38,8 @@ public class Verifier {
 
     public void verifyCredentials(UserShowCredentialFirstMessage first,UserShowCredentialSecondMessage second)
     {
-        /*******************************************
 
-         COMPUTE D
-
-         *******************************************/
-        bn_t tmp = new bn_t();
-        ep_t ep_temp = new ep_t(), D = new ep_t();
-
-        Relic.INSTANCE.ep_neg_basic(D,second.getK_blind());
-        List<Boolean> disclosed = first.getDisclosed();
-        Map<Integer,bn_t> disclosedAttributes = first.getDisclosedAttributes();
-        List<ep_t> basepoints = second.getBasepoints();
-
-        for(int i=0;i<disclosed.size();++i)
-        {
-            if(disclosed.get(i))
-            {
-                // S_i^(-k_i)
-                Relic.INSTANCE.bn_neg(tmp,disclosedAttributes.get(i));
-                Relic.INSTANCE.ep_mul_monty(ep_temp,basepoints.get(i),tmp);
-
-                // Add to D
-                Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
-            }
-        }
+        ep_t D = Attributes.compute_D(second.getK_blind(), second.getBasepoints(), first.getDisclosedAttributes());
 
         /*******************************************
 

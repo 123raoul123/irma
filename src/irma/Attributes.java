@@ -63,8 +63,8 @@ public class Attributes {
         return copy;
     }
 
-    public static ep_t computeDLRepresentation(ep_t C, ep_t S, ep_t S0, List<ep_t> Si,
-                                               bn_t b, bn_t k, bn_t k0, Map<Integer, bn_t> ki) {
+    static ep_t computeDLRepresentation(ep_t C, ep_t S, ep_t S0, List<ep_t> Si,
+                                        bn_t b, bn_t k, bn_t k0, Map<Integer, bn_t> ki) {
         ep_t ret = new ep_t(), ep_temp = new ep_t();
 
         Relic.INSTANCE.ep_mul_monty(ret, C, b);
@@ -79,5 +79,19 @@ public class Attributes {
         }
 
         return ret;
+    }
+
+    static ep_t compute_D(ep_t K, List<ep_t> basepoints, Map<Integer,bn_t> disclosedAttributes) {
+        ep_t ep_temp = new ep_t(), D = new ep_t();
+
+        // Compute (K S S_0 \prod_{disclosed i} S_i)^{-1}
+        Relic.INSTANCE.ep_copy(D, K);
+        for (int i : disclosedAttributes.keySet()) {
+            Relic.INSTANCE.ep_mul_monty(ep_temp, basepoints.get(i), disclosedAttributes.get(i));
+            Relic.INSTANCE.ep_add_basic(D,D,ep_temp);
+        }
+        Relic.INSTANCE.ep_neg_basic(D, D);
+
+        return D;
     }
 }
