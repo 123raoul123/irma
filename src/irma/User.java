@@ -224,6 +224,7 @@ public class User {
         bn_t tmp = new bn_t(),inverse = new bn_t();
         ep_t C_blind = new ep_t(), T_blind = new ep_t();
 
+
         Relic.INSTANCE.bn_gcd_ext_basic(tmp, inverse, null, beta, ord);
         Relic.INSTANCE.bn_neg(tmp,alpha);
         Relic.INSTANCE.bn_mul_karat(tmp,tmp,inverse);
