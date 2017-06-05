@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class Attributes {
 
-    private List<bn_t> unsigned_attribute_list;
-    private List<ep_t> signed_attribute_list;
+    private List<bn_t> attributes;
+    private List<ep_t> basepoints;
 
     public Attributes(int n)
     {
-        unsigned_attribute_list = new ArrayList<>();
-        signed_attribute_list = new ArrayList<>();
+        attributes = new ArrayList<>();
+        basepoints = new ArrayList<>();
 
         bn_t ord = new bn_t();
         Relic.INSTANCE.ep_curve_get_ord(ord);
@@ -23,40 +23,40 @@ public class Attributes {
         {
             bn_t temp = new bn_t();
             Relic.INSTANCE.bn_rand_mod(temp,ord);
-            unsigned_attribute_list.add(temp);
+            attributes.add(temp);
         }
 
     }
 
-    public void setSignedAttributeList(List<ep_t> list)
+    public void setBasePoints(List<ep_t> list)
     {
-        for(ep_t a_i: list)
+        for(ep_t S_i: list)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,a_i);
-            signed_attribute_list.add(temp);
+            Relic.INSTANCE.ep_copy(temp,S_i);
+            basepoints.add(temp);
         }
     }
 
-    public List<ep_t> getSignedAttributeList()
+    public List<ep_t> getBasePoints()
     {
         List<ep_t> copy = new ArrayList<>();
-        for(ep_t a_i: signed_attribute_list)
+        for(ep_t S_i: basepoints)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,a_i);
+            Relic.INSTANCE.ep_copy(temp,S_i);
             copy.add(temp);
         }
         return copy;
     }
 
-    public List<bn_t> getUnsigned_attribute_list()
+    public List<bn_t> getAttributes()
     {
         List<bn_t> copy = new ArrayList<bn_t>();
-        for(bn_t a_i: unsigned_attribute_list)
+        for(bn_t k_i: attributes)
         {
             bn_t temp = new bn_t();
-            Relic.INSTANCE.bn_copy(temp,a_i);
+            Relic.INSTANCE.bn_copy(temp,k_i);
             copy.add(temp);
         }
         return copy;
