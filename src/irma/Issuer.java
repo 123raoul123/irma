@@ -26,7 +26,7 @@ public class Issuer {
     /**
      * This method is the first part of the issuance protocol
      *
-     * @return the issuer provides the user with S_bar and S0_bar and nonce
+     * @return the issuer provides the user with S_bar, S0_bar and nonce
      */
     public IssuerIssueFirstMessage createFirstIssuerMessage()
     {
@@ -117,7 +117,6 @@ public class Issuer {
 
          *******************************************/
         List<ep_t> basePoints = new ArrayList<>();
-
         for(int i = 1; i<privkey.getaList().size(); ++i)
         {
             ep_t bla = new ep_t();
@@ -130,14 +129,22 @@ public class Issuer {
          Set T
 
          *******************************************/
-        ep_t T = createT(first.getAttributes(),second.getS(),second.getR(),kappa_pp,K, basePoints);
+        ep_t T = new ep_t();
+        Relic.INSTANCE.ep_mul_monty(res,second.getS(),kappa_pp);
+        Relic.INSTANCE.ep_add_basic(T,K,res);
+        Relic.INSTANCE.ep_add_basic(T,T,second.getR());
+
+        for(int i=0; i<basePoints.size();++i)
+        {
+            Relic.INSTANCE.ep_mul_monty(res,basePoints.get(i),first.getAttributes().get(i));
+            Relic.INSTANCE.ep_add_basic(T,T,res);
+        }
+
+        Relic.INSTANCE.ep_mul_monty(T,T,privkey.getz());
 
         IssuerIssueSecondMessage mes = new IssuerIssueSecondMessage(kappa_pp,K, basePoints,T);
 
         return mes;
-
-
-
     }
 
 
@@ -170,36 +177,6 @@ public class Issuer {
         else
             return false;
 
-    }
-
-    /**
-     * This method is used to create T
-     *              T = (K*S^(kappa'')R*S_1^(k_1)*.....*S_n^(k_n))^z
-     * @param attributes k_1,...,k_n
-     * @param S S
-     * @param R R
-     * @param kappa_pp kappa''
-     * @param K K
-     * @param basePoints S_1,...,S_n
-     * @return ep_t returns T = (K*S^(kappa'')R*S_1^(k_1)*.....*S_n^(k_n))^z.
-     */
-    private ep_t createT(List<bn_t> attributes, ep_t S,ep_t R,
-                         bn_t kappa_pp,ep_t K,List<ep_t> basePoints)
-    {
-        //Calculate T
-        ep_t T = new ep_t(),res = new ep_t();
-        Relic.INSTANCE.ep_mul_monty(res,S,kappa_pp);
-        Relic.INSTANCE.ep_add_basic(T,K,res);
-        Relic.INSTANCE.ep_add_basic(T,T,R);
-
-        for(int i=1; i<basePoints.size();++i)
-        {
-            Relic.INSTANCE.ep_mul_monty(res,basePoints.get(i),attributes.get(i-1));
-            Relic.INSTANCE.ep_add_basic(T,T,res);
-        }
-
-        Relic.INSTANCE.ep_mul_monty(T,T,privkey.getz());
-        return T;
     }
 
 }

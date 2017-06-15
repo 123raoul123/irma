@@ -10,7 +10,8 @@ import java.util.Map;
 
 
 /**
- * Created by raoul on 06/05/2017.
+ * User class
+ * The user class is quite big. It is used to perform the Issuance and the ShowCredential protocol
  */
 public class User {
 
@@ -33,13 +34,22 @@ public class User {
         attributes = at;
     }
 
-
+    /**
+     * This method is the first part of the issuance protocol
+     *
+     * @return the user provides the issuer with his attributes
+     */
     public UserIssueFirstMessage createUserIssueFirstMessage()
     {
         UserIssueFirstMessage mes = new UserIssueFirstMessage(attributes.getAttributes());
         return mes;
     }
 
+    /**
+     * This method is the second part of the issuance protocol
+     * @param message Message received by issuer containing S_bar, S0_bar and nonce
+     * @return S,S0 and R. Plus W and s,s0 required for the proof
+     */
     public UserIssueSecondMessage createUserIssueSecondMessage(IssuerIssueFirstMessage message){
         bn_t alpha = new bn_t(),ord = new bn_t();
         ep_t R = new ep_t(),W = new ep_t();
@@ -102,18 +112,41 @@ public class User {
         bn_t s = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,kappa_p);
         Relic.INSTANCE.bn_add(s,temp,w);
-        Relic.INSTANCE.bn_mod_basic(s, s, ord);
+        //Relic.INSTANCE.bn_mod_basic(s, s, ord);
 
         //Create s0 = ck0 + w0
         bn_t s0 = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,privkey.getk0());
         Relic.INSTANCE.bn_add(s0,temp,w_0);
-        Relic.INSTANCE.bn_mod_basic(s0, s0, ord);
+        //Relic.INSTANCE.bn_mod_basic(s0, s0, ord);
 
         UserIssueSecondMessage m = new UserIssueSecondMessage(S, S0,R,W,s,s0);
         return m;
     }
 
+    /**
+     * This method is called after
+     * the signature is received to store and compute the signature
+     * @param message message containing the signature send by Issuer
+     */
+    public void setSignature(IssuerIssueSecondMessage message)
+    {
+        // k = k' + k''
+        Relic.INSTANCE.bn_add(kappa,kappa_p,message.getKappa_pp());
+        // set K
+        Relic.INSTANCE.ep_copy(K,message.getK());
+        // set T
+        Relic.INSTANCE.ep_copy(T,message.getT());
+        // store signed attributes
+        attributes.setBasePoints(message.getBasePoints());
+        //compute C
+        computeC();
+    }
+
+    /**
+     * This method is called after
+     * the signature is received to compute C
+     */
     private void computeC()
     {
         ep_t temp = new ep_t();
@@ -138,49 +171,45 @@ public class User {
             //C = K S^k S0^k0 S1^k1 ... Sn^kn
             Relic.INSTANCE.ep_add_basic(C,C,temp);
         }
-
     }
 
-    public void setSignature(IssuerIssueSecondMessage message)
-    {
-        // k = k' + k''
-        Relic.INSTANCE.bn_add(kappa,kappa_p,message.getKappa_pp());
-        // set K
-        Relic.INSTANCE.ep_copy(K,message.getK());
-        // set T
-        Relic.INSTANCE.ep_copy(T,message.getT());
-        // store signed attributes
-        attributes.setBasePoints(message.getBasePoints());
-        //compute C
-        computeC();
 
-    }
-
+    /**
+     * This method is called to start the ShowCredential protocol
+     * @param disclosed boolean list indicating if the attribute is disclosed or not
+     * @return the disclosed attributes that will be send to the verifier
+     */
     public UserShowCredentialFirstMessage createUserShowCredentialFirstMessage(List<Boolean> disclosed)
     {
         Map<Integer,bn_t> disclosed_attribute_list = new HashMap<>();
         List<bn_t> attribute_list = attributes.getAttributes();
 
         for(int i=0; i<disclosed.size();++i)
-        {
             if(disclosed.get(i))
-            {
                 disclosed_attribute_list.put(i,attribute_list.get(i));
-            }
-        }
 
         UserShowCredentialFirstMessage m = new UserShowCredentialFirstMessage(disclosed_attribute_list,disclosed);
         return m;
     }
 
-
+    /**
+     * This method is called to create the proof to the verifier
+     * @param first user message containing the disclosed attributes
+     * @param message contains the nonce of the verifier
+     * @param disclosed boolean list indicating if the attribute is disclosed or not
+     * @return the disclosed attributes that will be send to the verifier
+     */
     public UserShowCredentialSecondMessage createUserShowCredentialSecondMessage(UserShowCredentialFirstMessage first, VerifierShowCredentialFirstMessage message, List<Boolean> disclosed)
     {
-        //Generate rand alpha and beta
-        bn_t alpha = new bn_t(),beta = new bn_t(),ord = new bn_t();
+        /*******************************************
+
+         MASK K,S,S0,...,Sn with alpha
+
+         *******************************************/
+        //Generate rand alpha
+        bn_t alpha = new bn_t(),ord = new bn_t();
         Relic.INSTANCE.ep_curve_get_ord(ord);
         Relic.INSTANCE.bn_rand_mod(alpha,ord);
-        Relic.INSTANCE.bn_rand_mod(beta,ord);
 
         //Multiply everything with alpha
         ep_t K_blind = new ep_t(),S_blind = new ep_t(),S_zero_blind = new ep_t(),ep_temp = new ep_t();
@@ -197,9 +226,15 @@ public class User {
             blindedBasepoints.add(blinded);
         }
 
-        //C_blind = C^(-alpha/beta), T_blind = T^(-alpha/beta)
-        bn_t tmp = new bn_t(),inverse = new bn_t();
+        /*******************************************
+
+         MASK C and T with alpha and beta
+         C_blind = C^(-alpha/beta), T_blind = T^(-alpha/beta)
+
+         *******************************************/
+        bn_t tmp = new bn_t(),beta = new bn_t(),inverse = new bn_t();
         ep_t C_blind = new ep_t(), T_blind = new ep_t();
+        Relic.INSTANCE.bn_rand_mod(beta,ord);
 
         Relic.INSTANCE.bn_gcd_ext_basic(tmp, inverse, null, beta, ord);
         Relic.INSTANCE.bn_neg(tmp,alpha);
@@ -208,16 +243,18 @@ public class User {
         Relic.INSTANCE.ep_mul_monty(C_blind,C,tmp);
         Relic.INSTANCE.ep_mul_monty(T_blind,T,tmp);
 
+        /*******************************************
+
+         Compute D
+
+         *******************************************/
         D = Attributes.compute_D(K_blind, blindedBasepoints, first.getDisclosedAttributes());
 
         /*******************************************
 
-                SCHNORR PART
+         Compute W
 
          *******************************************/
-
-        // COMPUTE W
-        // set random w's
         bn_t w_beta = new bn_t(), w = new bn_t(), w0 = new bn_t();
         Map<Integer,bn_t> w_list = new HashMap<>();
         Relic.INSTANCE.bn_rand_mod(w_beta,ord);
@@ -235,6 +272,11 @@ public class User {
         ep_t W = Attributes.computeDLRepresentation(
                 C_blind, S_blind, S_zero_blind, blindedBasepoints, w_beta, w, w0, w_list);
 
+        /*******************************************
+
+         Compute c,s,s0,sBeta and sList
+
+         *******************************************/
         bn_t c = Attributes.hashAndConvert(message.getNonce(),W,D);
 
         //Create sBeta = cbeta+w
@@ -264,6 +306,12 @@ public class User {
                 sList.put(i,temp);
             }
         }
+
+        /*******************************************
+
+         return message
+
+         *******************************************/
         UserShowCredentialSecondMessage m = new UserShowCredentialSecondMessage(K_blind,S_blind,S_zero_blind,
                 blindedBasepoints,C_blind,T_blind,W,s,s0,sBeta,sList);
 

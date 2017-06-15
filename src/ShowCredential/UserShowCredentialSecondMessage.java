@@ -11,27 +11,27 @@ import java.util.Map;
  */
 public class UserShowCredentialSecondMessage {
 
-    private ep_t K_blind,S_blind,S_zero_blind,C_blind,T_blind,W;
+    private ep_t KBlind, SBlind, S0Blind, CBlind, TBlind,W;
     private bn_t sBeta,s,s0;
     private List<ep_t> basePoints;
     private Map<Integer,bn_t> sList;
 
-    public UserShowCredentialSecondMessage(ep_t K_blind, ep_t S_blind, ep_t S_zero_blind,
-                                           List<ep_t> basePoints, ep_t C_blind, ep_t T_blind,
-                                           ep_t W,bn_t s, bn_t s0, bn_t sBeta, Map<Integer,bn_t> sList)
+    public UserShowCredentialSecondMessage(ep_t KBlind, ep_t SBlind, ep_t S0Blind,
+                                           List<ep_t> basePoints, ep_t CBlind, ep_t TBlind,
+                                           ep_t W, bn_t s, bn_t s0, bn_t sBeta, Map<Integer,bn_t> sList)
     {
-        this.K_blind = new ep_t();
-        this.S_blind = new ep_t();
-        this.S_zero_blind = new ep_t();
-        this.C_blind = new ep_t();
-        this.T_blind = new ep_t();
+        this.KBlind = new ep_t();
+        this.SBlind = new ep_t();
+        this.S0Blind = new ep_t();
+        this.CBlind = new ep_t();
+        this.TBlind = new ep_t();
         this.W = new ep_t();
 
-        Relic.INSTANCE.ep_copy(this.K_blind,K_blind);
-        Relic.INSTANCE.ep_copy(this.S_blind,S_blind);
-        Relic.INSTANCE.ep_copy(this.S_zero_blind,S_zero_blind);
-        Relic.INSTANCE.ep_copy(this.C_blind,C_blind);
-        Relic.INSTANCE.ep_copy(this.T_blind,T_blind);
+        Relic.INSTANCE.ep_copy(this.KBlind, KBlind);
+        Relic.INSTANCE.ep_copy(this.SBlind, SBlind);
+        Relic.INSTANCE.ep_copy(this.S0Blind, S0Blind);
+        Relic.INSTANCE.ep_copy(this.CBlind, CBlind);
+        Relic.INSTANCE.ep_copy(this.TBlind, TBlind);
         Relic.INSTANCE.ep_copy(this.W,W);
 
         this.sBeta = new bn_t();
@@ -89,38 +89,38 @@ public class UserShowCredentialSecondMessage {
         return copy;
     }
 
-    public ep_t getS_zero_blind()
+    public ep_t getS0Blind()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,S_zero_blind);
+        Relic.INSTANCE.ep_copy(copy, S0Blind);
         return copy;
     }
 
-    public ep_t getS_blind()
+    public ep_t getSBlind()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,S_blind);
+        Relic.INSTANCE.ep_copy(copy, SBlind);
         return copy;
     }
 
-    public ep_t getK_blind()
+    public ep_t getKBlind()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,K_blind);
+        Relic.INSTANCE.ep_copy(copy, KBlind);
         return copy;
     }
 
-    public ep_t getC_blind()
+    public ep_t getCBlind()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,C_blind);
+        Relic.INSTANCE.ep_copy(copy, CBlind);
         return copy;
     }
 
-    public ep_t getT_blind()
+    public ep_t getTBlind()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,T_blind);
+        Relic.INSTANCE.ep_copy(copy, TBlind);
         return copy;
     }
 
