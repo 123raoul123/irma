@@ -136,7 +136,7 @@ public class Issuer {
     private boolean validateR(UserIssueSecondMessage second)
     {
         //Obtain c from H(R,W,Nonce)
-        bn_t c = second.hashAndConvert(nonce);
+        bn_t c = Attributes.hashAndConvertWRNonce(nonce,second.getW(), second.getR());
 
         // res = R^c W
         ep_t res = new ep_t();

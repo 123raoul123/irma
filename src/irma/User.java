@@ -89,14 +89,13 @@ public class User {
 
         //add left and right to obtain W
         Relic.INSTANCE.ep_add_basic(W,left,right);
-        UserIssueSecondMessage m = new UserIssueSecondMessage(S, S0,R,W);
 
         /*******************************************
 
          Create c for proof of knowledge and create s and s0
 
          *******************************************/
-        bn_t c = m.hashAndConvert(message.getNonce());
+        bn_t c = Attributes.hashAndConvertWRNonce(message.getNonce(),W,R);
         bn_t temp = new bn_t();
 
         //Create s = ck'+ w
@@ -104,16 +103,14 @@ public class User {
         Relic.INSTANCE.bn_mul_karat(temp,c,kappa_p);
         Relic.INSTANCE.bn_add(s,temp,w);
         Relic.INSTANCE.bn_mod_basic(s, s, ord);
-        m.sets(s);
 
         //Create s0 = ck0 + w0
         bn_t s0 = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,privkey.getk0());
         Relic.INSTANCE.bn_add(s0,temp,w_0);
         Relic.INSTANCE.bn_mod_basic(s0, s0, ord);
-        m.sets0(s0);
 
-
+        UserIssueSecondMessage m = new UserIssueSecondMessage(S, S0,R,W,s,s0);
         return m;
     }
 
@@ -144,7 +141,7 @@ public class User {
 
     }
 
-    public void setAttributes(IssuerIssueSecondMessage message)
+    public void setSignature(IssuerIssueSecondMessage message)
     {
         // k = k' + k''
         Relic.INSTANCE.bn_add(kappa,kappa_p,message.getKappa_pp());
@@ -238,10 +235,7 @@ public class User {
         ep_t W = Attributes.computeDLRepresentation(
                 C_blind, S_blind, S_zero_blind, blindedBasepoints, w_beta, w, w0, w_list);
 
-        UserShowCredentialSecondMessage m = new UserShowCredentialSecondMessage(K_blind,S_blind,S_zero_blind,
-                blindedBasepoints,C_blind,T_blind,W);
-
-        bn_t c = m.hashAndConvert(message.getNonce(),D);
+        bn_t c = Attributes.hashAndConvertWDNonce(message.getNonce(),W,D);
 
         //Create sBeta = cbeta+w
         bn_t sBeta = new bn_t();
@@ -270,10 +264,8 @@ public class User {
                 sList.put(i,temp);
             }
         }
-        m.sets(s);
-        m.sets0(s0);
-        m.setsBeta(sBeta);
-        m.setsList(sList);
+        UserShowCredentialSecondMessage m = new UserShowCredentialSecondMessage(K_blind,S_blind,S_zero_blind,
+                blindedBasepoints,C_blind,T_blind,W,s,s0,sBeta,sList);
 
         return m;
 

@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c0ed674-f522-4b11-8822-0c0d76cc2927" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Issue/IssuerIssueFirstMessage.java" afterPath="$PROJECT_DIR$/src/Issue/IssuerIssueFirstMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Issue/IssuerIssueSecondMessage.java" afterPath="$PROJECT_DIR$/src/Issue/IssuerIssueSecondMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java" afterPath="$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java" afterPath="$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java" afterPath="$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/Attributes.java" afterPath="$PROJECT_DIR$/src/irma/Attributes.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/Issuer.java" afterPath="$PROJECT_DIR$/src/irma/Issuer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/IssuerPrivateKey.java" afterPath="$PROJECT_DIR$/src/irma/IssuerPrivateKey.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/IssuerPublicKey.java" afterPath="$PROJECT_DIR$/src/irma/IssuerPublicKey.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/User.java" afterPath="$PROJECT_DIR$/src/irma/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/UserPrivateKey.java" afterPath="$PROJECT_DIR$/src/irma/UserPrivateKey.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/irma/Verifier.java" afterPath="$PROJECT_DIR$/src/irma/Verifier.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/relic/HelloWorld.java" afterPath="$PROJECT_DIR$/src/relic/HelloWorld.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -44,21 +38,11 @@
       <file leaf-file-name="Issuer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/irma/Issuer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="50" selection-end-column="53" />
+            <state relative-caret-position="117">
+              <caret line="138" column="86" lean-forward="false" selection-start-line="138" selection-start-column="86" selection-end-line="138" selection-end-column="86" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IssuerIssueFirstMessage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Issue/IssuerIssueFirstMessage.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="11" column="72" lean-forward="false" selection-start-line="11" selection-start-column="60" selection-end-line="11" selection-end-column="72" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -75,7 +59,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VerifierShowCredentialFirstMessage.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VerifierShowCredentialFirstMessage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ShowCredential/VerifierShowCredentialFirstMessage.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
@@ -85,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="User.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/irma/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1100">
-              <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+            <state relative-caret-position="1397">
+              <caret line="143" column="23" lean-forward="true" selection-start-line="143" selection-start-column="23" selection-end-line="143" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -100,16 +84,9 @@
       <file leaf-file-name="UserShowCredentialSecondMessage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="25" column="49" lean-forward="false" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
-              <folding>
-                <element signature="e#1894#1895#0" expanded="true" />
-                <element signature="e#1951#1952#0" expanded="true" />
-                <element signature="e#2116#2117#0" expanded="true" />
-                <element signature="e#2165#2166#0" expanded="true" />
-                <element signature="e#2334#2335#0" expanded="true" />
-                <element signature="e#2385#2386#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="238">
+              <caret line="25" column="102" lean-forward="false" selection-start-line="25" selection-start-column="102" selection-end-line="25" selection-end-column="102" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,8 +104,8 @@
       <file leaf-file-name="Attributes.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/irma/Attributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-579">
-              <caret line="27" column="9" lean-forward="true" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
+            <state relative-caret-position="193">
+              <caret line="146" column="10" lean-forward="false" selection-start-line="146" selection-start-column="10" selection-end-line="146" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -137,8 +114,20 @@
       <file leaf-file-name="Verifier.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/irma/Verifier.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+            <state relative-caret-position="328">
+              <caret line="40" column="73" lean-forward="false" selection-start-line="40" selection-start-column="73" selection-end-line="40" selection-end-column="73" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserIssueFirstMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="358">
+              <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -149,15 +138,11 @@
       <file leaf-file-name="UserIssueSecondMessage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="44" selection-end-column="5" />
+            <state relative-caret-position="136">
+              <caret line="18" column="78" lean-forward="false" selection-start-line="18" selection-start-column="78" selection-end-line="18" selection-end-column="78" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#915#916#0" expanded="true" />
-                <element signature="e#966#967#0" expanded="true" />
-                <element signature="e#1131#1132#0" expanded="true" />
-                <element signature="e#1180#1181#0" expanded="true" />
-                <marker date="1497554511000" expanded="true" signature="740:746" ph="{...}" />
+                <marker date="1497555856000" expanded="true" signature="843:849" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -524,14 +509,14 @@
         <option value="$PROJECT_DIR$/src/Issue/IssuerIssueSecondMessage.java" />
         <option value="$PROJECT_DIR$/src/Issue/IssuerIssueFirstMessage.java" />
         <option value="$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java" />
-        <option value="$PROJECT_DIR$/src/irma/Attributes.java" />
         <option value="$PROJECT_DIR$/src/irma/IssuerPrivateKey.java" />
         <option value="$PROJECT_DIR$/src/irma/IssuerPublicKey.java" />
-        <option value="$PROJECT_DIR$/src/irma/Issuer.java" />
         <option value="$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java" />
+        <option value="$PROJECT_DIR$/src/irma/Issuer.java" />
         <option value="$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java" />
-        <option value="$PROJECT_DIR$/src/irma/User.java" />
+        <option value="$PROJECT_DIR$/src/irma/Attributes.java" />
         <option value="$PROJECT_DIR$/src/irma/Verifier.java" />
+        <option value="$PROJECT_DIR$/src/irma/User.java" />
       </list>
     </option>
   </component>
@@ -1012,11 +997,7 @@
           <caret line="37" column="48" lean-forward="false" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#915#916#0" expanded="true" />
-            <element signature="e#966#967#0" expanded="true" />
-            <element signature="e#1131#1132#0" expanded="true" />
-            <element signature="e#1180#1181#0" expanded="true" />
-            <marker date="1497554511000" expanded="true" signature="740:746" ph="{...}" />
+            <marker date="1497555856000" expanded="true" signature="843:849" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1295,16 +1276,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/irma/IssuerPrivateKey.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1020">
@@ -1317,14 +1288,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="23" column="42" lean-forward="true" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/irma/Attributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-579">
-          <caret line="27" column="9" lean-forward="true" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1345,66 +1308,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/irma/Issuer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="50" selection-end-column="53" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="44" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#915#916#0" expanded="true" />
-            <element signature="e#966#967#0" expanded="true" />
-            <element signature="e#1131#1132#0" expanded="true" />
-            <element signature="e#1180#1181#0" expanded="true" />
-            <marker date="1497554511000" expanded="true" signature="740:746" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="25" column="49" lean-forward="false" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
-          <folding>
-            <element signature="e#1894#1895#0" expanded="true" />
-            <element signature="e#1951#1952#0" expanded="true" />
-            <element signature="e#2116#2117#0" expanded="true" />
-            <element signature="e#2165#2166#0" expanded="true" />
-            <element signature="e#2334#2335#0" expanded="true" />
-            <element signature="e#2385#2386#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/irma/Verifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/irma/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1100">
-          <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ShowCredential/UserShowCredentialFirstMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
@@ -1415,11 +1318,78 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueFirstMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/irma/Issuer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="138" column="86" lean-forward="false" selection-start-line="138" selection-start-column="86" selection-end-line="138" selection-end-column="86" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Issue/UserIssueSecondMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="18" column="78" lean-forward="false" selection-start-line="18" selection-start-column="78" selection-end-line="18" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1497555856000" expanded="true" signature="843:849" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ShowCredential/VerifierShowCredentialFirstMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ShowCredential/UserShowCredentialSecondMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="25" column="102" lean-forward="false" selection-start-line="25" selection-start-column="102" selection-end-line="25" selection-end-column="102" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/irma/Attributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="146" column="10" lean-forward="false" selection-start-line="146" selection-start-column="10" selection-end-line="146" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/irma/Verifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="40" column="73" lean-forward="false" selection-start-line="40" selection-start-column="73" selection-end-line="40" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/irma/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1397">
+          <caret line="143" column="23" lean-forward="true" selection-start-line="143" selection-start-column="23" selection-end-line="143" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

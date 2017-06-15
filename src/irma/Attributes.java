@@ -1,5 +1,10 @@
 package irma;
 import relic.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -94,4 +99,80 @@ public class Attributes {
 
         return D;
     }
+
+    /**
+     * This method is used to hash H(R,W,Nonce) and convert to bn_t which we call c
+     * @param nonce provided by Issuer
+     * @param R created by user
+     * @param W created by user
+     * @return bn_t c which is H(R,W,Nonce) converted to bn_t
+     */
+    static bn_t hashAndConvertWRNonce(byte[] nonce, ep_t W, ep_t R)
+    {
+        //Convert R and W to bytes
+        byte[] R_byte = new byte[1000];
+        byte[] W_byte = new byte[1000];
+        Relic.INSTANCE.ep_write_bin(R_byte,1000, R,0);
+        Relic.INSTANCE.ep_write_bin(W_byte,1000, W,0);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        try
+        {
+            //Concat ETA (Nonce) W and R
+            outputStream.write(nonce);
+            outputStream.write(W_byte);
+            outputStream.write(R_byte);
+            byte concat[] = outputStream.toByteArray();
+
+
+            //HASH RESULT AND CONVERT TO BN_T
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(concat);
+            bn_t c = new bn_t();
+            Relic.INSTANCE.bn_read_bin(c, hash, hash.length);
+            return c;
+        }
+        catch (IOException | NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Something went wrong :(\n");
+        }
+    }
+
+    /**
+     * This method is used to hash H(W,D,Nonce) and convert to bn_t which we call c
+     * Nonce provided by the Verifier
+     * @return bn_t c which is H(R,W,Nonce) converted to bn_t
+     */
+    static bn_t hashAndConvertWDNonce(byte[] nonce, ep_t W, ep_t D)
+    {
+        //Convert D and W to bytes
+        byte[] D_byte = new byte[1000],W_byte = new byte[1000];
+        Relic.INSTANCE.ep_write_bin(D_byte,1000,D,0);
+        Relic.INSTANCE.ep_write_bin(W_byte,1000,W,0);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        try
+        {
+            //Concat ETA (Nonce) W and D
+            outputStream.write(nonce);
+            outputStream.write(W_byte);
+            outputStream.write(D_byte);
+            byte concat[] = outputStream.toByteArray();
+
+
+            //HASH RESULT AND CONVERT TO BN_T
+            byte[] hash;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            hash = digest.digest(concat);
+            bn_t c = new bn_t();
+            Relic.INSTANCE.bn_read_bin(c,hash,hash.length);
+            return c;
+        }
+        catch (IOException | NoSuchAlgorithmException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

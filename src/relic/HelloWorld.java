@@ -89,7 +89,7 @@ public class HelloWorld {
 		IssuerIssueFirstMessage fim_mes = issuer.createFirstIssuerMessage();
 		UserIssueSecondMessage sum_mes = user.createUserIssueSecondMessage(fim_mes);
 		IssuerIssueSecondMessage sim_mes = issuer.createSecondIssuerMessage(fum_mes,sum_mes);
-		user.setAttributes(sim_mes);
+		user.setSignature(sim_mes);
 
 		//ShowCredential protocol
 		Verifier verifier = new Verifier(pk.getPublicKey());
