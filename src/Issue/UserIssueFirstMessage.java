@@ -8,28 +8,28 @@ import java.util.List;
  */
 public class UserIssueFirstMessage {
 
-    private List<bn_t> unsigned_attributes;
+    private List<bn_t> attributes;
 
-    public UserIssueFirstMessage(List<bn_t> unsigned_attributes)
+    public UserIssueFirstMessage(List<bn_t> attributes)
     {
-        this.unsigned_attributes = new ArrayList<>();
+        this.attributes = new ArrayList<>();
 
-        for(int i=0;i<unsigned_attributes.size();++i)
+        for(int i = 0; i< attributes.size(); ++i)
         {
             bn_t temp = new bn_t();
-            Relic.INSTANCE.bn_copy(temp,unsigned_attributes.get(i));
-            this.unsigned_attributes.add(temp);
+            Relic.INSTANCE.bn_copy(temp, attributes.get(i));
+            this.attributes.add(temp);
         }
     }
 
-    public List<bn_t> getUnsigned_attributes()
+    public List<bn_t> getAttributes()
     {
         List<bn_t> copy = new ArrayList<>();
 
-        for(int i=0;i<unsigned_attributes.size();++i)
+        for(int i = 0; i< attributes.size(); ++i)
         {
             bn_t temp = new bn_t();
-            Relic.INSTANCE.bn_copy(temp,unsigned_attributes.get(i));
+            Relic.INSTANCE.bn_copy(temp, attributes.get(i));
             copy.add(temp);
         }
         return copy;

@@ -6,16 +6,16 @@ import relic.*;
  */
 public class IssuerIssueFirstMessage {
 
-    private ep_t S_bar, S_zero_bar;
+    private ep_t S_bar, S0_bar;
     private byte[] nonce;
 
-    public IssuerIssueFirstMessage(ep_t S_bar, ep_t S_zero_bar, byte[] nonce)
+    public IssuerIssueFirstMessage(ep_t S_bar, ep_t S0_bar, byte[] nonce)
     {
         this.S_bar = new ep_t();
-        this.S_zero_bar = new ep_t();
+        this.S0_bar = new ep_t();
 
         Relic.INSTANCE.ep_copy(this.S_bar,S_bar);
-        Relic.INSTANCE.ep_copy(this.S_zero_bar,S_zero_bar);
+        Relic.INSTANCE.ep_copy(this.S0_bar, S0_bar);
 
         this.nonce = new byte[nonce.length];
         System.arraycopy(nonce,0,this.nonce,0,this.nonce.length);
@@ -31,14 +31,14 @@ public class IssuerIssueFirstMessage {
     public ep_t getS_bar()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,this.S_bar);
+        Relic.INSTANCE.ep_copy(copy,S_bar);
         return copy;
     }
 
-    public ep_t getS_zero_bar()
+    public ep_t getS0_bar()
     {
         ep_t copy = new ep_t();
-        Relic.INSTANCE.ep_copy(copy,this.S_zero_bar);
+        Relic.INSTANCE.ep_copy(copy,S0_bar);
         return copy;
     }
 }

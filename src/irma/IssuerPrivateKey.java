@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IssuerPrivateKey {
-    private List<bn_t> a_list = new ArrayList<bn_t>();
+    private List<bn_t> aList = new ArrayList<bn_t>();
     private bn_t a,z;
     private IssuerPublicKey pubkey;
 
@@ -23,7 +23,7 @@ public class IssuerPrivateKey {
         {
             bn_t tmp = new bn_t();
             Relic.INSTANCE.bn_rand_mod(tmp,ord);
-            this.a_list.add(tmp);
+            this.aList.add(tmp);
         }
 
         //CREATE PUBLIC KEY
@@ -34,7 +34,7 @@ public class IssuerPrivateKey {
         Relic.INSTANCE.ep2_mul_monty(Z,Q,z);
         List<ep2_t> A_list = new ArrayList<>();
 
-        for(bn_t a_i: a_list){
+        for(bn_t a_i: aList){
             ep2_t temp = new ep2_t();
             Relic.INSTANCE.ep2_mul_monty(temp,Q,a_i);
             A_list.add(temp);
@@ -47,7 +47,7 @@ public class IssuerPrivateKey {
     {
         this.a = privkey.geta();
         this.z = privkey.getz();
-        this.a_list = privkey.geta_list();
+        this.aList = privkey.getaList();
         this.pubkey = privkey.getPublicKey();
     }
 
@@ -70,9 +70,9 @@ public class IssuerPrivateKey {
         return copy;
     }
 
-    public List<bn_t> geta_list()
+    public List<bn_t> getaList()
     {
-        List<bn_t> copy = new ArrayList<>(a_list);
+        List<bn_t> copy = new ArrayList<>(aList);
         return copy;
     }
 

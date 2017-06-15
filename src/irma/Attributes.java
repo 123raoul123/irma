@@ -10,12 +10,12 @@ import java.util.Map;
 public class Attributes {
 
     private List<bn_t> attributes;
-    private List<ep_t> basepoints;
+    private List<ep_t> basePoints;
 
     public Attributes(int n)
     {
         attributes = new ArrayList<>();
-        basepoints = new ArrayList<>();
+        basePoints = new ArrayList<>();
 
         bn_t ord = new bn_t();
         Relic.INSTANCE.ep_curve_get_ord(ord);
@@ -35,14 +35,14 @@ public class Attributes {
         {
             ep_t temp = new ep_t();
             Relic.INSTANCE.ep_copy(temp,S_i);
-            basepoints.add(temp);
+            basePoints.add(temp);
         }
     }
 
     public List<ep_t> getBasePoints()
     {
         List<ep_t> copy = new ArrayList<>();
-        for(ep_t S_i: basepoints)
+        for(ep_t S_i: basePoints)
         {
             ep_t temp = new ep_t();
             Relic.INSTANCE.ep_copy(temp,S_i);
@@ -53,7 +53,7 @@ public class Attributes {
 
     public List<bn_t> getAttributes()
     {
-        List<bn_t> copy = new ArrayList<bn_t>();
+        List<bn_t> copy = new ArrayList<>();
         for(bn_t k_i: attributes)
         {
             bn_t temp = new bn_t();

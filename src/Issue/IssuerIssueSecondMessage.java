@@ -10,9 +10,9 @@ import java.util.List;
 public class IssuerIssueSecondMessage {
     private bn_t kappa_pp;
     private ep_t K,T;
-    private List<ep_t> signed_attribute_list;
+    private List<ep_t> basePoints;
 
-    public IssuerIssueSecondMessage(bn_t kappa_pp,ep_t K,List<ep_t> signed_attribute_list,ep_t T)
+    public IssuerIssueSecondMessage(bn_t kappa_pp, ep_t K, List<ep_t> basePoints, ep_t T)
     {
         this.kappa_pp = new bn_t();
         this.K = new ep_t();
@@ -22,13 +22,13 @@ public class IssuerIssueSecondMessage {
         Relic.INSTANCE.ep_copy(this.K,K);
         Relic.INSTANCE.ep_copy(this.T,T);
 
-        this.signed_attribute_list = new ArrayList<>();
+        this.basePoints = new ArrayList<>();
 
-        for(int i=0;i<signed_attribute_list.size();++i)
+        for(int i = 0; i< basePoints.size(); ++i)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,signed_attribute_list.get(i));
-            this.signed_attribute_list.add(temp);
+            Relic.INSTANCE.ep_copy(temp, basePoints.get(i));
+            this.basePoints.add(temp);
         }
     }
 
@@ -53,14 +53,14 @@ public class IssuerIssueSecondMessage {
         return copy;
     }
 
-    public List<ep_t> getSigned_attribute_list()
+    public List<ep_t> getBasePoints()
     {
         List<ep_t> copy = new ArrayList<>();
 
-        for(int i=0;i<signed_attribute_list.size();++i)
+        for(int i = 0; i< basePoints.size(); ++i)
         {
             ep_t temp = new ep_t();
-            Relic.INSTANCE.ep_copy(temp,signed_attribute_list.get(i));
+            Relic.INSTANCE.ep_copy(temp, basePoints.get(i));
             copy.add(temp);
         }
 
