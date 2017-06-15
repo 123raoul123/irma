@@ -7,12 +7,12 @@ import java.util.List;
 /**
  * Created by raoul on 06/05/2017.
  */
-public class IssuerIssueSecondMessage {
+public class IssueSignatureMessage {
     private bn_t kappa_pp;
     private ep_t K,T;
     private List<ep_t> basePoints;
 
-    public IssuerIssueSecondMessage(bn_t kappa_pp, ep_t K, List<ep_t> basePoints, ep_t T)
+    public IssueSignatureMessage(bn_t kappa_pp, ep_t K, List<ep_t> basePoints, ep_t T)
     {
         this.kappa_pp = new bn_t();
         this.K = new ep_t();

@@ -10,11 +10,11 @@ import java.util.Map;
 /**
  * Created by raoul on 28/05/2017.
  */
-public class UserShowCredentialFirstMessage {
+public class ShowCredentialRequestMessage {
     private Map<Integer,bn_t> disclosedAttributes;
     private List<Boolean> disclosed;
 
-    public UserShowCredentialFirstMessage(Map<Integer,bn_t> disclosedAttributes, List<Boolean> disclosed)
+    public ShowCredentialRequestMessage(Map<Integer,bn_t> disclosedAttributes, List<Boolean> disclosed)
     {
         this.disclosedAttributes = new HashMap<>();
 

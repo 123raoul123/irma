@@ -9,14 +9,14 @@ import java.util.Map;
 /**
  * Created by raoul on 25/05/2017.
  */
-public class UserShowCredentialSecondMessage {
+public class ShowCredentialCommitmentMessage {
 
     private ep_t KBlind, SBlind, S0Blind, CBlind, TBlind,W;
     private bn_t sBeta,s,s0;
     private List<ep_t> basePoints;
     private Map<Integer,bn_t> sList;
 
-    public UserShowCredentialSecondMessage(ep_t KBlind, ep_t SBlind, ep_t S0Blind,
+    public ShowCredentialCommitmentMessage(ep_t KBlind, ep_t SBlind, ep_t S0Blind,
                                            List<ep_t> basePoints, ep_t CBlind, ep_t TBlind,
                                            ep_t W, bn_t s, bn_t s0, bn_t sBeta, Map<Integer,bn_t> sList)
     {

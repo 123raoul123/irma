@@ -25,13 +25,13 @@ public class Verifier {
      * This method is the first part of the ShowCredential protocol
      * It returns a nonce needed for the proof
      */
-    public VerifierShowCredentialFirstMessage createVerifierShowCredentialFirstMessage()
+    public ShowCredentialResponseMessage createVerifierShowCredentialFirstMessage()
     {
         //Generate nonce for schnorr
         SecureRandom rand = new SecureRandom();
         rand.nextBytes(nonce);
 
-        VerifierShowCredentialFirstMessage m = new VerifierShowCredentialFirstMessage(nonce);
+        ShowCredentialResponseMessage m = new ShowCredentialResponseMessage(nonce);
         return m;
     }
 
@@ -41,7 +41,7 @@ public class Verifier {
      * @param second Message received by user. contains blinded signature and proof
      * @return True if all check are passed
      */
-    public boolean verifyCredentials(UserShowCredentialFirstMessage first,UserShowCredentialSecondMessage second)
+    public boolean verifyCredentials(ShowCredentialRequestMessage first, ShowCredentialCommitmentMessage second)
     {
         /*******************************************
 

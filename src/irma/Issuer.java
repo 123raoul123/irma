@@ -28,7 +28,7 @@ public class Issuer {
      *
      * @return the issuer provides the user with S_bar, S0_bar and nonce
      */
-    public IssuerIssueFirstMessage createFirstIssuerMessage()
+    public IssueResponseMessage createFirstIssuerMessage()
     {
         //Generate nonce for schnorr
         SecureRandom rand = new SecureRandom();
@@ -44,7 +44,7 @@ public class Issuer {
         //S0_bar = K_bar^a_0
         Relic.INSTANCE.ep_mul_monty(S0_bar,K_bar,privkey.getaList().get(0));
 
-        IssuerIssueFirstMessage message = new IssuerIssueFirstMessage(S_bar, S0_bar,this.nonce);
+        IssueResponseMessage message = new IssueResponseMessage(S_bar, S0_bar,this.nonce);
 
         return message;
     }
@@ -56,7 +56,7 @@ public class Issuer {
      * @param second second user message
      * @return message containing the signature of the user
      */
-    public IssuerIssueSecondMessage createSecondIssuerMessage(UserIssueFirstMessage first, UserIssueSecondMessage second)
+    public IssueSignatureMessage createSecondIssuerMessage(IssueRequestMessage first, IssueCommitmentMessage second)
     {
 
         /*******************************************
@@ -142,7 +142,7 @@ public class Issuer {
 
         Relic.INSTANCE.ep_mul_monty(T,T,privkey.getz());
 
-        IssuerIssueSecondMessage mes = new IssuerIssueSecondMessage(kappa_pp,K, basePoints,T);
+        IssueSignatureMessage mes = new IssueSignatureMessage(kappa_pp,K, basePoints,T);
 
         return mes;
     }
@@ -155,7 +155,7 @@ public class Issuer {
      * @param second message that needs to be verified
      * @return boolean returns true if the statement R^c W = (S^s) (S_0^s_0) is true
      */
-    private boolean validateR(UserIssueSecondMessage second)
+    private boolean validateR(IssueCommitmentMessage second)
     {
         //Obtain c from H(R,W,Nonce)
         bn_t c = Attributes.hashAndConvert(nonce,second.getW(), second.getR());

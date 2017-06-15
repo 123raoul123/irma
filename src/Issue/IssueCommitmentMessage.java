@@ -5,13 +5,13 @@ import relic.*;
 /**
  * Created by raoul on 30/04/2017.
  */
-public class UserIssueSecondMessage {
+public class IssueCommitmentMessage {
 
     private ep_t S, S0,R,W;
     private bn_t s, s0;
 
 
-    public UserIssueSecondMessage(ep_t S, ep_t S0, ep_t R, ep_t W,bn_t s,bn_t s0)
+    public IssueCommitmentMessage(ep_t S, ep_t S0, ep_t R, ep_t W, bn_t s, bn_t s0)
     {
         this.S = new ep_t();
         this.S0 = new ep_t();

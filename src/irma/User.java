@@ -39,9 +39,9 @@ public class User {
      *
      * @return the user provides the issuer with his attributes
      */
-    public UserIssueFirstMessage createUserIssueFirstMessage()
+    public IssueRequestMessage createUserIssueFirstMessage()
     {
-        UserIssueFirstMessage mes = new UserIssueFirstMessage(attributes.getAttributes());
+        IssueRequestMessage mes = new IssueRequestMessage(attributes.getAttributes());
         return mes;
     }
 
@@ -50,7 +50,7 @@ public class User {
      * @param message Message received by issuer containing S_bar, S0_bar and nonce
      * @return S,S0 and R. Plus W and s,s0 required for the proof
      */
-    public UserIssueSecondMessage createUserIssueSecondMessage(IssuerIssueFirstMessage message){
+    public IssueCommitmentMessage createUserIssueSecondMessage(IssueResponseMessage message){
         bn_t alpha = new bn_t(),ord = new bn_t();
         ep_t R = new ep_t(),W = new ep_t();
 
@@ -85,17 +85,17 @@ public class User {
 
         /*******************************************
 
-         Create W = S^w S_0^w_0
+         Create W = S^w S0^w0
 
          *******************************************/
-        //random w and w_0
-        bn_t w = new bn_t(),w_0 = new bn_t();
+        //random w and w0
+        bn_t w = new bn_t(),w0 = new bn_t();
         Relic.INSTANCE.bn_rand_mod(w,ord);
-        Relic.INSTANCE.bn_rand_mod(w_0,ord);
+        Relic.INSTANCE.bn_rand_mod(w0,ord);
 
 
         Relic.INSTANCE.ep_mul_monty(left,S,w);
-        Relic.INSTANCE.ep_mul_monty(right, S0,w_0);
+        Relic.INSTANCE.ep_mul_monty(right, S0,w0);
 
         //add left and right to obtain W
         Relic.INSTANCE.ep_add_basic(W,left,right);
@@ -117,10 +117,10 @@ public class User {
         //Create s0 = ck0 + w0
         bn_t s0 = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,privkey.getk0());
-        Relic.INSTANCE.bn_add(s0,temp,w_0);
+        Relic.INSTANCE.bn_add(s0,temp,w0);
         //Relic.INSTANCE.bn_mod_basic(s0, s0, ord);
 
-        UserIssueSecondMessage m = new UserIssueSecondMessage(S, S0,R,W,s,s0);
+        IssueCommitmentMessage m = new IssueCommitmentMessage(S, S0,R,W,s,s0);
         return m;
     }
 
@@ -129,7 +129,7 @@ public class User {
      * the signature is received to store and compute the signature
      * @param message message containing the signature send by Issuer
      */
-    public void setSignature(IssuerIssueSecondMessage message)
+    public void setSignature(IssueSignatureMessage message)
     {
         // k = k' + k''
         Relic.INSTANCE.bn_add(kappa,kappa_p,message.getKappa_pp());
@@ -179,7 +179,7 @@ public class User {
      * @param disclosed boolean list indicating if the attribute is disclosed or not
      * @return the disclosed attributes that will be send to the verifier
      */
-    public UserShowCredentialFirstMessage createUserShowCredentialFirstMessage(List<Boolean> disclosed)
+    public ShowCredentialRequestMessage createShowCredentialRequestMessage(List<Boolean> disclosed)
     {
         Map<Integer,bn_t> disclosed_attribute_list = new HashMap<>();
         List<bn_t> attribute_list = attributes.getAttributes();
@@ -188,7 +188,7 @@ public class User {
             if(disclosed.get(i))
                 disclosed_attribute_list.put(i,attribute_list.get(i));
 
-        UserShowCredentialFirstMessage m = new UserShowCredentialFirstMessage(disclosed_attribute_list,disclosed);
+        ShowCredentialRequestMessage m = new ShowCredentialRequestMessage(disclosed_attribute_list,disclosed);
         return m;
     }
 
@@ -199,7 +199,7 @@ public class User {
      * @param disclosed boolean list indicating if the attribute is disclosed or not
      * @return the disclosed attributes that will be send to the verifier
      */
-    public UserShowCredentialSecondMessage createUserShowCredentialSecondMessage(UserShowCredentialFirstMessage first, VerifierShowCredentialFirstMessage message, List<Boolean> disclosed)
+    public ShowCredentialCommitmentMessage createShowCredentialCommitmentMessage(ShowCredentialRequestMessage first, ShowCredentialResponseMessage message, List<Boolean> disclosed)
     {
         /*******************************************
 
@@ -269,8 +269,8 @@ public class User {
             }
         }
 
-        ep_t W = Attributes.computeDLRepresentation(
-                C_blind, S_blind, S_zero_blind, blindedBasepoints, w_beta, w, w0, w_list);
+        ep_t W = Attributes.computeDLRepresentation(C_blind, S_blind, S_zero_blind,
+                blindedBasepoints, w_beta, w, w0, w_list);
 
         /*******************************************
 
@@ -312,7 +312,7 @@ public class User {
          return message
 
          *******************************************/
-        UserShowCredentialSecondMessage m = new UserShowCredentialSecondMessage(K_blind,S_blind,S_zero_blind,
+        ShowCredentialCommitmentMessage m = new ShowCredentialCommitmentMessage(K_blind,S_blind,S_zero_blind,
                 blindedBasepoints,C_blind,T_blind,W,s,s0,sBeta,sList);
 
         return m;

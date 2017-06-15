@@ -1,12 +1,12 @@
 package relic;
 
-import Issue.IssuerIssueFirstMessage;
-import Issue.IssuerIssueSecondMessage;
-import Issue.UserIssueFirstMessage;
-import Issue.UserIssueSecondMessage;
-import ShowCredential.UserShowCredentialFirstMessage;
-import ShowCredential.UserShowCredentialSecondMessage;
-import ShowCredential.VerifierShowCredentialFirstMessage;
+import Issue.IssueResponseMessage;
+import Issue.IssueSignatureMessage;
+import Issue.IssueRequestMessage;
+import Issue.IssueCommitmentMessage;
+import ShowCredential.ShowCredentialRequestMessage;
+import ShowCredential.ShowCredentialCommitmentMessage;
+import ShowCredential.ShowCredentialResponseMessage;
 import irma.*;
 
 import java.net.URL;
@@ -85,10 +85,10 @@ public class HelloWorld {
 		User user = new User(privk,at);
 
 		// ISSUE PROTOCOL
-		UserIssueFirstMessage fum_mes = user.createUserIssueFirstMessage();
-		IssuerIssueFirstMessage fim_mes = issuer.createFirstIssuerMessage();
-		UserIssueSecondMessage sum_mes = user.createUserIssueSecondMessage(fim_mes);
-		IssuerIssueSecondMessage sim_mes = issuer.createSecondIssuerMessage(fum_mes,sum_mes);
+		IssueRequestMessage fum_mes = user.createUserIssueFirstMessage();
+		IssueResponseMessage fim_mes = issuer.createFirstIssuerMessage();
+		IssueCommitmentMessage sum_mes = user.createUserIssueSecondMessage(fim_mes);
+		IssueSignatureMessage sim_mes = issuer.createSecondIssuerMessage(fum_mes,sum_mes);
 		user.setSignature(sim_mes);
 
 		//ShowCredential protocol
@@ -100,9 +100,9 @@ public class HelloWorld {
 		bools.add(false);
 		bools.add(true);
 
-		UserShowCredentialFirstMessage fium_mes = user.createUserShowCredentialFirstMessage(bools);
-		VerifierShowCredentialFirstMessage fvm_mes = verifier.createVerifierShowCredentialFirstMessage();
-		UserShowCredentialSecondMessage seum_mes = user.createUserShowCredentialSecondMessage(fium_mes, fvm_mes,bools);
+		ShowCredentialRequestMessage fium_mes = user.createShowCredentialRequestMessage(bools);
+		ShowCredentialResponseMessage fvm_mes = verifier.createVerifierShowCredentialFirstMessage();
+		ShowCredentialCommitmentMessage seum_mes = user.createShowCredentialCommitmentMessage(fium_mes, fvm_mes,bools);
 		verifier.verifyCredentials(fium_mes,seum_mes);
 
 		System.out.println("Cleaning up Relic");

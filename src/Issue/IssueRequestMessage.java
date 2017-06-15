@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * Created by raoul on 24/05/2017.
  */
-public class UserIssueFirstMessage {
+public class IssueRequestMessage {
 
     private List<bn_t> attributes;
 
-    public UserIssueFirstMessage(List<bn_t> attributes)
+    public IssueRequestMessage(List<bn_t> attributes)
     {
         this.attributes = new ArrayList<>();
 

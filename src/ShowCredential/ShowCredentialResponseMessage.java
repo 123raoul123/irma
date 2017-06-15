@@ -4,11 +4,11 @@ package ShowCredential;
 /**
  * Created by raoul on 27/05/2017.
  */
-public class VerifierShowCredentialFirstMessage {
+public class ShowCredentialResponseMessage {
 
     private byte[] nonce;
 
-    public VerifierShowCredentialFirstMessage(byte[] nonce)
+    public ShowCredentialResponseMessage(byte[] nonce)
     {
         this.nonce = nonce;
     }

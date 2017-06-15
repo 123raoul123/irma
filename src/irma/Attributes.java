@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by raoul on 24/05/2017.
+ * Attribute class
+ * Contains the user attributes and basepoints
+ * This class also has 3 methods used by the Issuer, Verifier and the User
+ * These methods are used for proving and converting hashes
  */
 public class Attributes {
 
