@@ -38,7 +38,7 @@ public class Verifier {
     {
 
         ep_t D = Attributes.compute_D(second.getK_blind(), second.getBasePoints(), first.getDisclosedAttributes());
-        bn_t c = Attributes.hashAndConvertWDNonce(nonce,second.getW(),D);
+        bn_t c = Attributes.hashAndConvert(nonce,second.getW(),D);
 
         /*
 

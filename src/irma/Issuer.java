@@ -5,21 +5,29 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * This class is the Issuer it has a secret key
+ * and is able to perform the issuance protocol
+ */
 public class Issuer {
 
     private IssuerPrivateKey privkey;
     private byte[] nonce;
-    private ep_t S_bar,S_zero_bar;
+    private ep_t S_bar, S0_bar;
 
     public Issuer(IssuerPrivateKey privkey)
     {
         this.privkey = privkey;
         nonce = new byte[16];
         S_bar = new ep_t();
-        S_zero_bar = new ep_t();
+        S0_bar = new ep_t();
     }
 
+    /**
+     * This method is the first part of the issuance protocol
+     *
+     * @return the issuer provides the user with S_bar and S0_bar and nonce
+     */
     public IssuerIssueFirstMessage createFirstIssuerMessage()
     {
         //Generate nonce for schnorr
@@ -33,14 +41,21 @@ public class Issuer {
         //S_bar = K_bar^a
         Relic.INSTANCE.ep_mul_monty(S_bar,K_bar,privkey.geta());
 
-        //S_zero_bar = K_bar^a_0
-        Relic.INSTANCE.ep_mul_monty(S_zero_bar,K_bar,privkey.getaList().get(0));
+        //S0_bar = K_bar^a_0
+        Relic.INSTANCE.ep_mul_monty(S0_bar,K_bar,privkey.getaList().get(0));
 
-        IssuerIssueFirstMessage message = new IssuerIssueFirstMessage(S_bar,S_zero_bar,this.nonce);
+        IssuerIssueFirstMessage message = new IssuerIssueFirstMessage(S_bar, S0_bar,this.nonce);
 
         return message;
     }
 
+    /**
+     * This method is the last part of the issuance protocol
+     *              if all the checks are valid the Issuer will create a signature
+     * @param first first user message
+     * @param second second user message
+     * @return message containing the signature of the user
+     */
     public IssuerIssueSecondMessage createSecondIssuerMessage(UserIssueFirstMessage first, UserIssueSecondMessage second)
     {
 
@@ -136,7 +151,7 @@ public class Issuer {
     private boolean validateR(UserIssueSecondMessage second)
     {
         //Obtain c from H(R,W,Nonce)
-        bn_t c = Attributes.hashAndConvertWRNonce(nonce,second.getW(), second.getR());
+        bn_t c = Attributes.hashAndConvert(nonce,second.getW(), second.getR());
 
         // res = R^c W
         ep_t res = new ep_t();

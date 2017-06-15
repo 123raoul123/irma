@@ -2,11 +2,6 @@ package Issue;
 
 import relic.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * Created by raoul on 30/04/2017.
  */

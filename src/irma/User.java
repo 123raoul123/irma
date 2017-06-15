@@ -95,7 +95,7 @@ public class User {
          Create c for proof of knowledge and create s and s0
 
          *******************************************/
-        bn_t c = Attributes.hashAndConvertWRNonce(message.getNonce(),W,R);
+        bn_t c = Attributes.hashAndConvert(message.getNonce(),W,R);
         bn_t temp = new bn_t();
 
         //Create s = ck'+ w
@@ -235,7 +235,7 @@ public class User {
         ep_t W = Attributes.computeDLRepresentation(
                 C_blind, S_blind, S_zero_blind, blindedBasepoints, w_beta, w, w0, w_list);
 
-        bn_t c = Attributes.hashAndConvertWDNonce(message.getNonce(),W,D);
+        bn_t c = Attributes.hashAndConvert(message.getNonce(),W,D);
 
         //Create sBeta = cbeta+w
         bn_t sBeta = new bn_t();
