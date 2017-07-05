@@ -7,8 +7,15 @@ This application has the following dependencies. All these dependencies are incl
 
 * [Relic](https://github.com/relic-toolkit/relic)
   * A forked version of Relic is used to support [Relic edit](https://github.com/sietseringers/relic)
+  * The 638 barreto naehrig elliptic curve is used (flag -DFP_PRIME=638)
   
 * [Java Native Access](https://github.com/java-native-access/jna)
+  * Java Native Access is used to enable java to use the relic dynamic c library.
+  
+## Project structure
+* Relic
+* IRMA
+
   
 ## Building
 
