@@ -6,7 +6,7 @@ credential scheme](https://eprint.iacr.org/2017/115.pdf). The application uses t
 This application has the following dependencies. All these dependencies are included in the project and are compiled by and loaded when building the code.
 
 * [Relic](https://github.com/relic-toolkit/relic)
-  * A forked version of Relic is used to support [Relic edit](https://github.com/sietseringers/relic)
+  * A forked version of Relic is used to extract variables defined by macro's. The code is located at [Relic edit](https://github.com/sietseringers/relic).
   * The 638 barreto naehrig elliptic curve is used (flag -DFP_PRIME=638)
   * dylib version located in /resources.
   
