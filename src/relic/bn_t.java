@@ -1,7 +1,6 @@
 package relic;
 
 import com.sun.jna.Memory;
-
 import java.util.Base64;
 
 public class bn_t extends Memory {
