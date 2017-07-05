@@ -22,11 +22,11 @@ Contains classes that are needed to interface with the relic toolkit.
 Contains all the logic needed to perform the issue and show credential protocol. The package contains:
 
 * Issuer.java
- * The issuer class implements the issuer role for the Issue protocol. Upon creation of the object it generates a private and a public key implemented in IssuerPrivateKey.java and IssuerPublicKey.java.
+  * The issuer class implements the issuer role for the Issue protocol. Upon creation of the object it generates a private and a public key implemented in IssuerPrivateKey.java and IssuerPublicKey.java.
 * User.java 
- * The user class implements the user role for both the Issue and ShowCredential protocol. Upon creation of the object it generates a privatekey and attributes, these are defined in UserPravateKey.java and Attributes.java.
+  * The user class implements the user role for both the Issue and ShowCredential protocol. Upon creation of the object it generates a privatekey and attributes, these are defined in UserPravateKey.java and Attributes.java.
 * Verifier.java
- * The verifier class implements the verifier role used in the ShowCredential protocol. Upon creation of the object it obtains the public key of the Issuer.
+  * The verifier class implements the verifier role used in the ShowCredential protocol. Upon creation of the object it obtains the public key of the Issuer.
 
 ### Issue
 ### ShowCredential
