@@ -29,8 +29,10 @@ Contains all the logic needed to perform the issue and show credential protocol.
   * The verifier class implements the verifier role used in the ShowCredential protocol. Upon creation of the object it obtains the public key of the Issuer.
 
 ### Issue
-### ShowCredential
+The issue package contains all the data classes used in the Issue protocol.
 
+### ShowCredential
+The ShowCredential package contains all the data classes used in the ShowCredential protocol.
   
 ## Building
 
