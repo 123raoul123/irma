@@ -71,6 +71,18 @@ public class Attributes {
         return copy;
     }
 
+    /**
+     * This method is used to proof knowledge
+     * @param C blinded C
+     * @param S blinded S
+     * @param S0 blinded s0
+     * @param Si blinded basepoints
+     * @param b w_beta/s_beta
+     * @param k w/s
+     * @param k0 w0/s0
+     * @param ki w_list/s_list
+     * @return ep_t D
+     */
     static ep_t computeDLRepresentation(ep_t C, ep_t S, ep_t S0, List<ep_t> Si,
                                         bn_t b, bn_t k, bn_t k0, Map<Integer, bn_t> ki) {
         ep_t ret = new ep_t(), ep_temp = new ep_t();
@@ -89,6 +101,13 @@ public class Attributes {
         return ret;
     }
 
+    /**
+     * This method is used to proof knowledge
+     * @param K blinded k
+     * @param basepoints blinded basepoints
+     * @param disclosedAttributes Attributes that are shared with verifier
+     * @return ep_t D
+     */
     static ep_t compute_D(ep_t K, List<ep_t> basepoints, Map<Integer,bn_t> disclosedAttributes) {
         ep_t ep_temp = new ep_t(), D = new ep_t();
 

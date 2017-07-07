@@ -25,7 +25,7 @@ public class Verifier {
      * This method is the first part of the ShowCredential protocol
      * It returns a nonce needed for the proof
      */
-    public ShowCredentialResponseMessage createVerifierShowCredentialFirstMessage()
+    public ShowCredentialResponseMessage createShowCredentialResponseMessage()
     {
         //Generate nonce for schnorr
         SecureRandom rand = new SecureRandom();

@@ -39,7 +39,7 @@ public class User {
      *
      * @return the user provides the issuer with his attributes
      */
-    public IssueRequestMessage createUserIssueFirstMessage()
+    public IssueRequestMessage createIssueRequestMessage()
     {
         IssueRequestMessage mes = new IssueRequestMessage(attributes.getAttributes());
         return mes;
@@ -50,7 +50,7 @@ public class User {
      * @param message Message received by issuer containing S_bar, S0_bar and nonce
      * @return S,S0 and R. Plus W and s,s0 required for the proof
      */
-    public IssueCommitmentMessage createUserIssueSecondMessage(IssueResponseMessage message){
+    public IssueCommitmentMessage createIssueCommitmentMessage(IssueResponseMessage message){
         bn_t alpha = new bn_t(),ord = new bn_t();
         ep_t R = new ep_t(),W = new ep_t();
 
@@ -112,13 +112,11 @@ public class User {
         bn_t s = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,kappa_p);
         Relic.INSTANCE.bn_add(s,temp,w);
-        //Relic.INSTANCE.bn_mod_basic(s, s, ord);
 
         //Create s0 = ck0 + w0
         bn_t s0 = new bn_t();
         Relic.INSTANCE.bn_mul_karat(temp,c,privkey.getk0());
         Relic.INSTANCE.bn_add(s0,temp,w0);
-        //Relic.INSTANCE.bn_mod_basic(s0, s0, ord);
 
         IssueCommitmentMessage m = new IssueCommitmentMessage(S, S0,R,W,s,s0);
         return m;

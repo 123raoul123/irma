@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by raoul on 29/04/2017.
+ * This class stores the public key of the issuer
  */
 public class IssuerPublicKey {
 

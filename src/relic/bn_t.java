@@ -3,6 +3,9 @@ package relic;
 import com.sun.jna.Memory;
 import java.util.Base64;
 
+/**
+*	Element in Z_p
+ */
 public class bn_t extends Memory {
 	public bn_t() {
 		super(Relic.SIZES.bn_st_size);

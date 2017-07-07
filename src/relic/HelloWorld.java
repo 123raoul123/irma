@@ -1,119 +1,105 @@
 package relic;
 
-import Issue.IssueResponseMessage;
-import Issue.IssueSignatureMessage;
-import Issue.IssueRequestMessage;
-import Issue.IssueCommitmentMessage;
-import ShowCredential.ShowCredentialRequestMessage;
-import ShowCredential.ShowCredentialCommitmentMessage;
-import ShowCredential.ShowCredentialResponseMessage;
+import Issue.*;
+import ShowCredential.*;
 import irma.*;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HelloWorld {
 	public static void main(String[] args) {
+		/*******************************************
+
+		 Initialize relic library
+
+		 *******************************************/
 		initRelic();
 
-		/*
-		Relic.INSTANCE.ep_param_print();
-		System.out.println(Relic.INSTANCE.ep_param_embed());
+		/*******************************************
 
-		bn_t n = new bn_t();
-		Relic.INSTANCE.ep_curve_get_ord(n);
+		 Generate random Q and set n
 
-		fp12_t e1 = new fp12_t();
-		fp12_t e2 = new fp12_t();
-		ep_t p = new ep_t();
-		ep2_t q = new ep2_t();
-		Relic.INSTANCE.ep_rand(p);
-		Relic.INSTANCE.ep2_rand(q);
-		Relic.INSTANCE.pp_map_oatep_k12(e1,p,q);
-
-		System.out.println("optimal ate pairing non-degeneracy is correct");
-		System.out.print("Next result should NOT equal 0 : ");
-		System.out.println(Relic.INSTANCE.fp12_cmp_dig(e1, 1));
-
-		Relic.INSTANCE.ep_set_infty(p);
-		Relic.INSTANCE.pp_map_oatep_k12(e1,p,q);
-		System.out.print("Next result should equal 0 : ");
-		System.out.println(Relic.INSTANCE.fp12_cmp_dig(e1, 1));
-
-		Relic.INSTANCE.ep_rand(p);
-		Relic.INSTANCE.ep2_set_infty(q);
-		Relic.INSTANCE.pp_map_oatep_k12(e1,p,q);
-		System.out.print("Next result should equal 0 : ");
-		System.out.println(Relic.INSTANCE.fp12_cmp_dig(e1,1));
-
-		bn_t k = new bn_t();
-		ep2_t r = new ep2_t();
-		System.out.println("optimal ate pairing is bilinear");
-		Relic.INSTANCE.ep_rand(p);
-		Relic.INSTANCE.ep2_rand(q);
-		Relic.INSTANCE.bn_rand_mod(k, n);
-		Relic.INSTANCE.ep2_mul_monty(r, q, k);
-		Relic.INSTANCE.pp_map_oatep_k12(e1,p,r);
-		Relic.INSTANCE.ep_mul_monty(p,p,k);
-		Relic.INSTANCE.pp_map_oatep_k12(e2,p,q);
-		System.out.print("Next result should equal 0 : ");
-		System.out.println(Relic.INSTANCE.fp12_cmp(e1,e2));
-
-
-		// Calculate a^{-1} mod ord
-		bn_t a = new bn_t(), a_inverse = new bn_t(), ord = new bn_t(), tmp = new bn_t();
-		Relic.INSTANCE.ep_curve_get_ord(ord); // Get the group order
-		Relic.INSTANCE.bn_rand_mod(a, ord);   // Generate a random a
-		Relic.INSTANCE.bn_gcd_ext_basic(tmp, a_inverse, null, a, ord);
-
-		// Check that a * a^{-1} = 1 mod ord
-		bn_t one = new bn_t();
-		Relic.INSTANCE.bn_mul_karat(one, a, a_inverse); // a * a^{-1}
-		Relic.INSTANCE.bn_mod_basic(one, one, ord);     // reduce mod ord
-		System.out.printf("Modular inverse works: %s\n", Relic.INSTANCE.bn_cmp_dig(one, 1) == 0);
-		*/
-
+		 *******************************************/
 		ep2_t Q = new ep2_t();
 		Relic.INSTANCE.ep2_rand(Q);
 		int n = 5;
 
+		/*******************************************
+
+		 Initialize issuer
+
+		 *******************************************/
 		IssuerPrivateKey pk = new IssuerPrivateKey(n,Q);
 		Issuer issuer = new Issuer(pk);
+		/*******************************************
+
+		 Initialize User with attributes n-1
+
+		 *******************************************/
 		Attributes at = new Attributes(n-1);
 		UserPrivateKey privk = new UserPrivateKey();
 		User user = new User(privk,at);
 
-		// ISSUE PROTOCOL
-		IssueRequestMessage fum_mes = user.createUserIssueFirstMessage();
-		IssueResponseMessage fim_mes = issuer.createFirstIssuerMessage();
-		IssueCommitmentMessage sum_mes = user.createUserIssueSecondMessage(fim_mes);
-		IssueSignatureMessage sim_mes = issuer.createSecondIssuerMessage(fum_mes,sum_mes);
+		/*******************************************
+
+		 TEST ISSUE PROTOCOL
+
+		 *******************************************/
+		IssueRequestMessage fum_mes = user.createIssueRequestMessage();
+		IssueResponseMessage fim_mes = issuer.createIssueResponseMessage();
+		IssueCommitmentMessage sum_mes = user.createIssueCommitmentMessage(fim_mes);
+		IssueSignatureMessage sim_mes = issuer.createIssueSignatureMessage(fum_mes,sum_mes);
 		user.setSignature(sim_mes);
 
-		//ShowCredential protocol
+		/*******************************************
+
+		 Initialize verifier
+
+		 *******************************************/
 		Verifier verifier = new Verifier(pk.getPublicKey());
 
+		/*******************************************
+
+		 Set list of disclosed attributes
+		 TRUE = Disclosed
+		 FALSE = Not Disclosed
+
+		 *******************************************/
 		List<Boolean> bools = new ArrayList<>();
 		bools.add(true);
 		bools.add(false);
 		bools.add(false);
 		bools.add(true);
 
+		/*******************************************
+
+		 TEST SHOW CREDENTIAL PROTOCOL
+
+		 *******************************************/
 		ShowCredentialRequestMessage fium_mes = user.createShowCredentialRequestMessage(bools);
-		ShowCredentialResponseMessage fvm_mes = verifier.createVerifierShowCredentialFirstMessage();
+		ShowCredentialResponseMessage fvm_mes = verifier.createShowCredentialResponseMessage();
 		ShowCredentialCommitmentMessage seum_mes = user.createShowCredentialCommitmentMessage(fium_mes, fvm_mes,bools);
 		verifier.verifyCredentials(fium_mes,seum_mes);
 
+		/*******************************************
+
+		 Clean relic
+
+		 *******************************************/
 		System.out.println("Cleaning up Relic");
 		Relic.INSTANCE.core_clean();
 
 	}
 
+	/**
+	 * Initialises relic by loading the library and setting the values for the objects used
+	 */
 	private static void initRelic() {
 		// The .getResource() method only returns the correct path when
 		// it is asked to locate an existing file - asking for "", "." or "/"
 		// does not work.
+		//CURENTLY THIS LINE OF CODE LOADS MAC VERSION (DYLIB) CHANGE THIS TO LOAD FOR DIFFERENT ARCHITECTURE
 		URL url = HelloWorld.class.getClassLoader().getResource("librelic.dylib");
 		if (url == null)
 			throw new RuntimeException("Native relic library not found");

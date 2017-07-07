@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IssuerPrivateKey {
-    private List<bn_t> aList = new ArrayList<bn_t>();
+    private List<bn_t> aList = new ArrayList<>();
     private bn_t a,z;
     private IssuerPublicKey pubkey;
 

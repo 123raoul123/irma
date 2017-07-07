@@ -28,7 +28,7 @@ public class Issuer {
      *
      * @return the issuer provides the user with S_bar, S0_bar and nonce
      */
-    public IssueResponseMessage createFirstIssuerMessage()
+    public IssueResponseMessage createIssueResponseMessage()
     {
         //Generate nonce for schnorr
         SecureRandom rand = new SecureRandom();
@@ -56,7 +56,7 @@ public class Issuer {
      * @param second second user message
      * @return message containing the signature of the user
      */
-    public IssueSignatureMessage createSecondIssuerMessage(IssueRequestMessage first, IssueCommitmentMessage second)
+    public IssueSignatureMessage createIssueSignatureMessage(IssueRequestMessage first, IssueCommitmentMessage second)
     {
 
         /*******************************************

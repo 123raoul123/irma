@@ -2,18 +2,23 @@ package relic;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 
 public interface Relic extends Library {
-	public static final Relic INSTANCE = (Relic) Native.loadLibrary("relic", Relic.class);
-	public static final RelicSizes SIZES = INSTANCE.get_relic_sizes();
+	Relic INSTANCE = (Relic) Native.loadLibrary("relic", Relic.class);
+	RelicSizes SIZES = INSTANCE.get_relic_sizes();
 
+	/**
+	 * Initializes the library.
+	 *
+	 * @return STS_OK if no error occurs, STS_ERR otherwise.
+	 */
 	int  core_init();
+	/**
+	 * Finalizes the library.
+	 *
+	 * @return STS_OK if no error occurs, STS_ERR otherwise.
+	 */
 	void core_clean();
-
-	void fp_param_print();
-	int  fp12_cmp_dig(fp12_t gt, int x);
 	/**
 	 * Returns the result of a comparison between two dodecic extension field
 	 * elements.
@@ -92,18 +97,12 @@ public interface Relic extends Library {
 	 * @param[out] a			- the multiple precision integer to negate.
 	 */
 	void bn_neg(bn_t res,bn_t a);
-	int bn_cmp(bn_t p,bn_t q);
-	void bn_div(bn_t res,bn_t a,bn_t b);
-	void bn_set_2b(bn_t a, int b);
-	int  bn_cmp_dig(bn_t a, int x);
-
 	/**
 	 * Returns the order of the group of points in the prime elliptic curve.
 	 *
 	 * @param[out] r			- the returned order.
 	 */
 	void ep_curve_get_ord(bn_t bn_st);
-	int  ep_param_set(int param);
 	/**
 	 * Copies the second argument to the first argument.
 	 *
@@ -117,7 +116,6 @@ public interface Relic extends Library {
 	 * @param[out] p			- the prime elliptic curve point to assign.
 	 */
 	void ep_rand(ep_t a);
-	void ep_param_print();
 	/**
 	 * Configures some set of pairing-friendly curve parameters for the current
 	 * security level.
@@ -125,8 +123,6 @@ public interface Relic extends Library {
 	 * @return STS_OK if there is a curve at this security level, STS_ERR otherwise.
 	 */
 	int  ep_param_set_any_pairf();
-	int  ep_param_embed();
-	void ep_set_infty(ep_t ep_st);
 	/**
 	 * Adds two prime elliptic curve points represented in affine coordinates.
 	 *
@@ -186,15 +182,12 @@ public interface Relic extends Library {
 	 * @param[in] k				- the integer.
 	 */
 	void ep2_mul_monty(ep2_t retval, ep2_t element, bn_t num);
-	void ep2_add_basic(ep2_t retval, ep2_t first, ep2_t second);
-	void ep2_set_infty(ep2_t ep2_st);
 	/**
 	 * Assigns a random value to an elliptic curve point.
 	 *
 	 * @param[out] p			- the elliptic curve point to assign.
 	 */
 	void ep2_rand(ep2_t a);
-
 	/**
 	 * Computes the optimal ate pairing of two points in a parameterized elliptic
 	 * curve with embedding degree 12.

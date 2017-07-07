@@ -3,7 +3,7 @@ package irma;
 import relic.*;
 
 /**
- * Created by raoul on 30/04/2017.
+ * This class generates and contains the private key of the user
  */
 public class UserPrivateKey {
 
@@ -17,6 +17,9 @@ public class UserPrivateKey {
         Relic.INSTANCE.bn_rand_mod(this.k0,ord);
     }
 
+    /**
+     * This method returns the private key of the user
+     */
     public bn_t getk0()
     {
         bn_t copy = new bn_t();
