@@ -8,8 +8,9 @@ This application has the following dependencies. All these dependencies are incl
 * [Relic](https://github.com/relic-toolkit/relic)
   * A forked version of Relic is used to extract variables defined by macro's. The code is located at [Relic edit](https://github.com/sietseringers/relic).
   * The 638 barreto naehrig elliptic curve is used (flag -DFP_PRIME=638)
-  * dylib version located in /resources.
+  * dylib and so version located in /resources.
   * Other flags that could be used to generate a smaller relic library are: -DDOCUM=OFF -DTESTS=0 -DBENCH=0 -DWITH="DV;BN;FP;FPX;EP;EPX;PP;PC;MD" -DSTLIB=OFF -DSTBIN=OFF
+  * The initRelic function in /relic/HelloWorld.java currently loads librelic.dylib
   
 * [Java Native Access](https://github.com/java-native-access/jna)
   * Java Native Access is used to enable java to use the relic dynamic c library.
@@ -38,6 +39,7 @@ The issue package contains all the data classes used in the Issue protocol.
 The ShowCredential package contains all the data classes used in the ShowCredential protocol.
   
 ## Building
+
 
 
 ## Testing
