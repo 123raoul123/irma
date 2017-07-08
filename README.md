@@ -40,7 +40,7 @@ The ShowCredential package contains all the data classes used in the ShowCredent
   
 ## Building
 
-
+    gradle build
 
 ## Testing
 The main class is located at /relic/HelloWorld.java. This class tests a single run of both protocols with n attributes.
